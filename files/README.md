@@ -1,0 +1,4 @@
+- postgrespro
+- pgbackrest
+- pgaudit
+- pgbadger

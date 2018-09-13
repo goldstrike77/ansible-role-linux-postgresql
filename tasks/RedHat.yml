@@ -1,0 +1,32 @@
+---
+- name: Add PostgreSQL YUM repositories
+  yum_repository:
+    name: '{{ pgsql_repo_name }}'
+    description: '{{ pgsql_repo_name }} YUM repository'
+    file: '{{ pgsql_repo_name }}'
+    baseurl: '{{ pgsql_repo_url }}'
+    gpgcheck: no
+
+- name: Install the PostgreSQL packages
+  yum:
+    name: '{{ ",".join(vars["pgsql_packages_" + pgsql_version]) }}'
+    state: 'present'
+
+- name: Ensure PostgreSQL firewall port is allow
+  firewalld:
+    port: '{{ item }}'
+    permanent: 'true'
+    state: 'enabled'
+  with_items:
+    - '{{ pgsql_port }}'
+  when:
+    - ansible_distribution_major_version|int > 6
+  register: result
+
+- name: Reload firewalld service
+  service:
+    name: firewalld
+    state: reloaded
+  when:
+    - result|changed
+    - ansible_distribution_major_version|int > 6

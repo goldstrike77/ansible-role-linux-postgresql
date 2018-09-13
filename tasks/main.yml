@@ -1,0 +1,16 @@
+---
+- name: Include OS-specific variables
+  include_vars: '{{ ansible_os_family }}.yml'
+
+- name: Include tasks for specific OS
+  include: '{{ ansible_os_family }}.yml'
+
+- name: Creating PostgreSQL folder
+  file:
+    dest: '{{ item }}'
+    state: directory
+    owner: '{{ pgsql_user }}'
+    group: '{{ pgsql_group }}'
+    mode: 0755
+  with_items:
+    - '{{ pgsql_folder }}'

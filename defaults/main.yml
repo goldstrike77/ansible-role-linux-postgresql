@@ -1,0 +1,5 @@
+---
+#pgsql_version: '96' or 10
+db_sa_pass: 'password'
+pgsql_path: '/data'
+pgsql_port: '5432/tcp'

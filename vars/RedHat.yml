@@ -1,0 +1,8 @@
+---
+pgsql_repo_name: "postgrespro"
+pgsql_repo_url: "http://repo.postgrespro.ru/pgpro-{{ pgsql_version | regex_replace('96', '9\\.6') }}/{{ ansible_distribution|lower }}/$releasever/os/$basearch/rpms"
+disable_gpg_check: yes
+pgsql_packages_96:
+  - 'postgrespro{{ pgsql_version }}'
+  - 'postgrespro{{ pgsql_version }}-libs'
+  - 'postgrespro{{ pgsql_version }}-server'
