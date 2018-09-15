@@ -1,5 +1,14 @@
 ---
 #pgsql_version: '96' or 10
 db_sa_pass: 'password'
+pgsql_user: 'postgres'
 pgsql_path: '/data'
 pgsql_port: '5432/tcp'
+pgsql_listen_addresses: "'0.0.0.0'"
+pgsql_checkpoint_completion_target: '0.9'
+pgsql_wal_buffers: '16MB'
+pgsql_default_statistics_target: '100'
+pgsql_random_page_cost: '4'
+pgsql_effective_io_concurrency: '2'
+pgsql_min_wal_size: '2GB'
+pgsql_max_wal_size: '4GB'
