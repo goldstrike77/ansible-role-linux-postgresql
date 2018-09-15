@@ -3,5 +3,5 @@ pgsql_user: 'postgres'
 pgsql_group: 'postgres'
 
 pgsql_folder:
-  - '{{ pgsql_path }}/pqsql'
+  - '{{ pgsql_path }}/pgsql'
   - '{{ pgsql_path }}/backup'

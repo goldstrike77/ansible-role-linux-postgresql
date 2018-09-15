@@ -14,3 +14,19 @@
     mode: 0755
   with_items:
     - '{{ pgsql_folder }}'
+
+- name: Modify the PostgreSQL default data folder
+  lineinfile:
+    state: present
+    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    insertafter: '^\[Service\]'
+    regexp: '^Environment=PGDATA'
+    line: 'Environment=PGDATA={{ pgsql_path }}/pgsql'
+
+- name: 'Set system-wide PATH parameters'
+  lineinfile: 
+    dest: '/etc/profile'
+    line: "export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/pgpro-9.6/bin"
+
+#- name: Initializes the PostgreSQL system tables
+#  shell: /bin/su - postgres -c "/usr/local/pgsql/bin/initdb -D /data/pgsql"
