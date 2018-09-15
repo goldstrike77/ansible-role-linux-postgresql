@@ -49,8 +49,7 @@
     line: '{{ item.line }}'
   with_items:
     - { regexp: '^listen_addresses ', line: 'listen_addresses = {{ pgsql_listen_addresses }}' }
-    - { regexp: '^max_connections ', line: 'max_connections = {% if ansible_memtotal_mb > 4096 and ansible_memtotal_mb <= 8192 %}210{% elif ansible_memtotal_mb > 8192 and ansible_memtotal_mb <= 16384 %}310{% elif ansible_memtotal_mb > 16384 and ansible_memtotal_mb <= 32768 %}510
-{% elif ansible_memtotal_mb > 32768 %}610{% else %}50{% endif %}' }
+    - { regexp: '^max_connections ', line: 'max_connections = {% if ansible_memtotal_mb > 4096 and ansible_memtotal_mb <= 8192 %}210{% elif ansible_memtotal_mb > 8192 and ansible_memtotal_mb <= 16384 %}310{% elif ansible_memtotal_mb > 16384 and ansible_memtotal_mb <= 32768 %}510{% elif ansible_memtotal_mb > 32768 %}610{% else %}50{% endif %}' }
     - { regexp: '^shared_buffers ', line: 'shared_buffers {{ (ansible_memtotal_mb * 0.25)|int }}MB' }
     - { regexp: '^effective_cache_size ', line: 'effective_cache_size {{ (ansible_memtotal_mb * 0.75)|int }}MB' }
     - { regexp: '^maintenance_work_mem ', line: 'maintenance_work_mem {{ (ansible_memtotal_mb * 0.0625)|int }}MB' }
