@@ -1,7 +1,6 @@
 ---
 #pgsql_version: '96' or 10
 db_sa_pass: 'password'
-pgsql_user: 'postgres'
 pgsql_path: '/data'
 pgsql_port: '5432/tcp'
 pgsql_listen_addresses: "'0.0.0.0'"
@@ -12,3 +11,18 @@ pgsql_random_page_cost: '4'
 pgsql_effective_io_concurrency: '2'
 pgsql_min_wal_size: '2GB'
 pgsql_max_wal_size: '4GB'
+pgsql_fsync: 'off'
+pgsql_synchronous_commit: 'off'
+pgsql_commit_delay: '10'
+pgsql_commit_siblings: '5'
+pgsql_log_line_prefix: "'%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '"
+pgsql_log_lock_waits: 'on'
+pgsql_log_statement: 'ddl'
+pgsql_log_temp_files: '0'
+pgsql_log_timezone: 'PRC'
+pgsql_log_min_duration_statement: '1000'
+pgsql_log_checkpoints: 'on'
+pgsql_log_connections: 'on'
+pgsql_log_disconnections: 'on'
+pgsql_log_autovacuum_min_duration: '0'
+pgsql_lc_messages: 'C'

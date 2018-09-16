@@ -15,13 +15,16 @@
   with_items:
     - '{{ pgsql_folder }}'
 
-- name: Modify the PostgreSQL default data folder
-  lineinfile:
+- name: Configure kernel parameters
+  sysctl:
+    name: '{{ item.variable }}'
+    value: '{{ item.value }}'
     state: present
-    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
-    insertafter: '^\[Service\]'
-    regexp: '^Environment=PGDATA'
-    line: 'Environment=PGDATA={{ pgsql_path }}/pgsql'
+    reload: yes
+    sysctl_set: yes
+    sysctl_file: /etc/sysctl.conf
+  with_items:
+    - '{{ pgsql_kernel_parameters }}'
 
 - name: 'Set system-wide PATH parameters'
   lineinfile: 
@@ -48,20 +51,38 @@
     regexp: '{{ item.regexp }}'
     line: '{{ item.line }}'
   with_items:
-    - { regexp: '^listen_addresses ', line: 'listen_addresses = {{ pgsql_listen_addresses }}' }
-    - { regexp: '^max_connections ', line: 'max_connections = {% if ansible_memtotal_mb > 4096 and ansible_memtotal_mb <= 8192 %}210{% elif ansible_memtotal_mb > 8192 and ansible_memtotal_mb <= 16384 %}310{% elif ansible_memtotal_mb > 16384 and ansible_memtotal_mb <= 32768 %}510{% elif ansible_memtotal_mb > 32768 %}610{% else %}50{% endif %}' }
-    - { regexp: '^shared_buffers ', line: 'shared_buffers {{ (ansible_memtotal_mb * 0.25)|int }}MB' }
-    - { regexp: '^effective_cache_size ', line: 'effective_cache_size {{ (ansible_memtotal_mb * 0.75)|int }}MB' }
-    - { regexp: '^maintenance_work_mem ', line: 'maintenance_work_mem {{ (ansible_memtotal_mb * 0.0625)|int }}MB' }
-    - { regexp: '^checkpoint_completion_target ', line: 'checkpoint_completion_target {{ pgsql_checkpoint_completion_target }}' }
-    - { regexp: '^wal_buffers ', line: 'wal_buffers {{ pgsql_wal_buffers }}' }
-    - { regexp: '^default_statistics_target ', line: 'default_statistics_target {{ pgsql_default_statistics_target }}' }
-    - { regexp: '^random_page_cost ', line: 'random_page_cost {{ pgsql_random_page_cost }}' }
-    - { regexp: '^effective_io_concurrency ', line: 'effective_io_concurrency {{ pgsql_effective_io_concurrency }}' }
-    - { regexp: '^work_mem ', line: 'work_mem {{ (ansible_memtotal_mb * 0.0004 * 1024 )|int }}kB' }
-    - { regexp: '^min_wal_size ', line: 'min_wal_size {{ pgsql_min_wal_size }}' }
-    - { regexp: '^max_wal_size ', line: 'max_wal_size {{ pgsql_max_wal_size }}' }
-    - { regexp: '^max_worker_processes ', line: 'max_worker_processes {{ ansible_processor_vcpus }}' }
-    - { regexp: '^max_parallel_workers_per_gather ', line: 'max_parallel_workers_per_gather {% if (ansible_processor_vcpus * 0.5)|int < 1 %}1{% else %}{{ (ansible_processor_vcpus * 0.5)|int }}{% endif %}' }
+    - '{{ pgsql_conf_parameter }}'
   when:
+    - result|changed
+
+- name: Modify the PostgreSQL default data folder
+  lineinfile:
+    state: present
+    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    insertafter: '^\[Service\]'
+    regexp: '^Environment=PGDATA'
+    line: 'Environment=PGDATA={{ pgsql_path }}/pgsql'
+  when:
+    - result|changed
+
+- name: Changing Limits for PostgreSQL services
+  lineinfile:
+    state: present
+    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    insertafter: '^\[Service\]'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  with_items:
+    - '{{ pgsql_service_parameter }}'
+  when:
+    - result|changed
+
+- name: Ensure PostgreSQL service is enabled
+  systemd:
+    name: 'postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  when:
+    - ansible_distribution_major_version|int > 6
     - result|changed
