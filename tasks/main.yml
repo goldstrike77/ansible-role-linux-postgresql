@@ -5,7 +5,7 @@
 - name: Include tasks for specific OS
   include: '{{ ansible_os_family }}.yml'
 
-- name: Creating PostgreSQL folder
+- name: 'Creating {{ pgsql_releases }} folder'
   file:
     dest: '{{ item }}'
     state: directory
@@ -15,7 +15,7 @@
   with_items:
     - '{{ pgsql_folder }}'
 
-- name: Configure kernel parameters
+- name: 'Configure {{ pgsql_releases }} kernel parameters'
   sysctl:
     name: '{{ item.variable }}'
     value: '{{ item.value }}'
@@ -31,58 +31,19 @@
     dest: '/etc/profile'
     line: "export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/pgpro-9.6/bin"
 
-- name: Check if PostgreSQL tablespace exists
+- name: 'Check if {{ pgsql_releases }} tablespace exists'
   stat:
     path: '{{ item }}'
   with_items:
     - '{{ pgsql_path }}/pgsql/PG_VERSION'
   register: result
 
-- name: Initializes the PostgreSQL system tables
+- name: 'Initializes the {{ pgsql_releases }} system tables'
   shell: /bin/su - {{ pgsql_user }} -c "initdb -D {{ pgsql_path }}/pgsql"
   when: 
     - not result.results[0].stat.exists
   register: result
 
-- name: PostgreSQL Server Configuration
-  lineinfile:
-    state: present
-    dest: '{{ pgsql_path }}/pgsql/postgresql.conf'
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
-  with_items:
-    - '{{ pgsql_conf_parameter }}'
-  when:
-    - result|changed
-
-- name: Modify the PostgreSQL default data folder
-  lineinfile:
-    state: present
-    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
-    insertafter: '^\[Service\]'
-    regexp: '^Environment=PGDATA'
-    line: 'Environment=PGDATA={{ pgsql_path }}/pgsql'
-  when:
-    - result|changed
-
-- name: Changing Limits for PostgreSQL services
-  lineinfile:
-    state: present
-    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
-    insertafter: '^\[Service\]'
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
-  with_items:
-    - '{{ pgsql_service_parameter }}'
-  when:
-    - result|changed
-
-- name: Ensure PostgreSQL service is enabled
-  systemd:
-    name: 'postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
-    enabled: yes
-    state: started
-    daemon_reload: yes
-  when:
-    - ansible_distribution_major_version|int > 6
-    - result|changed
+- name: 'Configure {{ pgsql_releases }}'
+  include: configureation.yml
+  when: result|changed

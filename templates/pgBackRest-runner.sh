@@ -2,11 +2,11 @@
 
 DATE=/bin/date
 CAT=/bin/cat
-FORMAIL=/usr/bin/formail
-SENDMAIL=/usr/sbin/sendmail
-BACKUPEX=/usr/local/pgsql/bin/pgbackrest
+FORMAIL=/bin/formail
+SENDMAIL=/sbin/sendmail
+BACKUPEX=/bin/pgbackrest
 TMPFILE="/tmp/pgBackRest.$$.log"
-MAILTO=zhetao.su@connext.com.cn
+MAILTO={{ pgsql_mailto }}
 
 if [ "`$DATE +%w`" == "0" ]; 
 then

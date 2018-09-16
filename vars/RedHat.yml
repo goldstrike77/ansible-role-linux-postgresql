@@ -1,11 +1,30 @@
 ---
-pgsql_repo_name: "postgrespro"
-pgsql_repo_url: 'http://repo.postgrespro.ru/pgpro-{{ pgsql_version | regex_replace("96", "9.6") }}/{{ ansible_distribution | lower }}/$releasever/os/$basearch/rpms'
 disable_gpg_check: yes
+
+# PostgreSQL Repository
+pgsql_repo_name: "postgresql"
+pgsql_repo_url: 'http://download.postgresql.org/pub/repos/yum/{{ pgsql_version | regex_replace("96", "9.6") }}/redhat/rhel-$releasever-$basearch'
 pgsql_packages_96:
-  - 'postgrespro96-server'
+  - 'postgresql96-contrib'
+  - 'postgresql96-libs'
+  - 'postgresql96-plperl'
+  - 'postgresql96-plpython'
+  - 'postgresql96-pltcl'
+  - 'postgresql96-server'
+  - 'pgbackrest'
+  - 'procmail'
+  - 'python-psycopg2'
+
+# PostgresPro Repository
+pgpro_repo_name: "postgrespro"
+pgpro_repo_url: 'http://repo.postgrespro.ru/pgpro-{{ pgsql_version | regex_replace("96", "9.6") }}/{{ ansible_distribution | lower }}/$releasever/os/$basearch/rpms'
+pgpro_packages_96:
   - 'postgrespro96-contrib'
+  - 'postgrespro96-libs'
   - 'postgrespro96-plperl'
   - 'postgrespro96-plpython'
   - 'postgrespro96-pltcl'
-  - 'postgrespro96-libs'
+  - 'postgrespro96-server'
+  - 'pgbackrest'
+  - 'procmail'
+  - 'python-psycopg2'

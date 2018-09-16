@@ -1,0 +1,72 @@
+- name: '{{ pgsql_releases }} Server Configuration'
+  lineinfile:
+    state: present
+    dest: '{{ pgsql_path }}/pgsql/postgresql.conf'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  with_items:
+    - '{{ pgsql_conf_parameter }}'
+
+- name: '{{ pgsql_releases }} Configure & Scripts file transfer'
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: postgres
+    group: postgres
+    mode: 0755
+  with_items:
+    - { src: '.pgpass', dest: '/var/lib/pgsql/.pgpass' }
+    - { src: 'pgbackrest.conf', dest: '/etc/pgbackrest.conf' }
+    - { src: 'pgBackRest-runner.sh', dest: '/usr/local/bin/pgBackRest-runner.sh' }
+
+- name: 'Modify the {{ pgsql_releases }} default data folder'
+  lineinfile:
+    state: present
+    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    insertafter: '^\[Service\]'
+    regexp: '^Environment=PGDATA'
+    line: 'Environment=PGDATA={{ pgsql_path }}/pgsql'
+
+- name: 'Changing Limits for {{ pgsql_releases }} services'
+  lineinfile:
+    state: present
+    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    insertafter: '^\[Service\]'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  with_items:
+    - '{{ pgsql_service_parameter }}'
+
+- name: 'Ensure {{ pgsql_releases }} service is enabled'
+  systemd:
+    name: 'postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  when:
+    - ansible_distribution_major_version|int > 6
+
+- name: 'Modify {{ pgsql_releases }} default password'
+  postgresql_user:
+    user: 'postgres'
+    password: '{{ db_sa_pass|default(omit,true) }}'
+#  no_log: true
+
+- name: Create the backup stanza
+  shell: /bin/su - postgres -c "pgbackrest --stanza=database --log-level-console=info stanza-create"
+
+- name : Backup job
+  cron:
+    name: '{{ pgsql_releases }} backup job'
+    user: postgres
+    minute: "{{ 59 |random}}"
+    hour: "{{ (( inventory_hostname | hash | list | map('int',0,16) | sum ) % 2) + 1 }}"
+    job: "/usr/local/bin/pgBackRest-runner.sh"
+
+- name: Ensure MTA service is enabled
+  systemd:
+    name: 'postfix.service'
+    enabled: 'yes'
+    state: 'started'
+  when:
+    - ansible_distribution_major_version|int > 6

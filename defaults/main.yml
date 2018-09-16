@@ -1,6 +1,8 @@
 ---
-#pgsql_version: '96' or 10
+#pgsql_version: '96' # 9.6 / 10
+pgsql_releases: 'PostgreSQL' # PostgreSQL / PostgresPro
 db_sa_pass: 'password'
+pgsql_mailto: 'somebody@example.com'
 pgsql_path: '/data'
 pgsql_port: '5432/tcp'
 pgsql_listen_addresses: "'0.0.0.0'"
@@ -26,3 +28,7 @@ pgsql_log_connections: 'on'
 pgsql_log_disconnections: 'on'
 pgsql_log_autovacuum_min_duration: '0'
 pgsql_lc_messages: 'C'
+pgsql_max_wal_senders: '3'
+pgsql_wal_level: 'logical'
+pgsql_archive_mode: 'on'
+pgsql_archive_command: "'/bin/pgbackrest --stanza=database archive-push %p'"
