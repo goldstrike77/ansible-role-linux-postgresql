@@ -22,7 +22,7 @@
 - name: 'Modify the {{ pgsql_releases }} default data folder'
   lineinfile:
     state: present
-    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    dest: '/lib/systemd/system/{% if pgsql_releases == "PostgresPro" %}postgrespro{% else %}postgresql{% endif %}-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
     insertafter: '^\[Service\]'
     regexp: '^Environment=PGDATA'
     line: 'Environment=PGDATA={{ pgsql_path }}/pgsql'
@@ -30,7 +30,7 @@
 - name: 'Changing Limits for {{ pgsql_releases }} services'
   lineinfile:
     state: present
-    dest: '/lib/systemd/system/postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    dest: '/lib/systemd/system/{% if pgsql_releases == "PostgresPro" %}postgrespro{% else %}postgresql{% endif %}-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
     insertafter: '^\[Service\]'
     regexp: '{{ item.regexp }}'
     line: '{{ item.line }}'
@@ -39,7 +39,7 @@
 
 - name: 'Ensure {{ pgsql_releases }} service is enabled'
   systemd:
-    name: 'postgrespro-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+    name: '{% if pgsql_releases == "PostgresPro" %}postgrespro{% else %}postgresql{% endif %}-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
     enabled: yes
     state: started
     daemon_reload: yes
@@ -50,12 +50,12 @@
   postgresql_user:
     user: 'postgres'
     password: '{{ db_sa_pass|default(omit,true) }}'
-#  no_log: true
+  no_log: true
 
-- name: Create the backup stanza
-  shell: /bin/su - postgres -c "pgbackrest --stanza=database --log-level-console=info stanza-create"
+- name: 'Create the {{ pgsql_releases } backup stanza'
+  shell: /bin/su - {{ pgsql_user }} -c "pgbackrest --stanza=database --log-level-console=info stanza-create"
 
-- name : Backup job
+- name : '{{ pgsql_releases } backup job'
   cron:
     name: '{{ pgsql_releases }} backup job'
     user: postgres

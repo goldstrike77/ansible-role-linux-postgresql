@@ -29,7 +29,7 @@
 - name: 'Set system-wide PATH parameters'
   lineinfile: 
     dest: '/etc/profile'
-    line: "export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/pgpro-9.6/bin"
+    line: "export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:{% if pgsql_releases == 'PostgresPro' %}/usr/pgpro-9.6/bin{% else %}/usr/pgsql-9.6/bin{% endif %}"
 
 - name: 'Check if {{ pgsql_releases }} tablespace exists'
   stat:
