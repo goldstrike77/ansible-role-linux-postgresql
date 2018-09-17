@@ -47,3 +47,6 @@
 - name: 'Configure {{ pgsql_releases }}'
   include: configureation.yml
   when: result|changed
+
+- name: 'Install {{ pgsql_releases }} prometheus exporter'
+  include: 'postgres_exporter.yml'

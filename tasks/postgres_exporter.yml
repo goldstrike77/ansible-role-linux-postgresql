@@ -1,0 +1,51 @@
+---
+- name: Add postgres_exporter YUM repositories
+  yum_repository:
+    name: '{{ pgsql_exporter_repo_name }}'
+    description: '{{ pgsql_exporter_repo_name }} YUM repository'
+    file: '{{ pgsql_exporter_repo_name }}'
+    baseurl: '{{ pgsql_exporter_repo_url }}'
+    gpgcheck: no
+
+- name: Install the postgres_exporter packages
+  yum:
+    name: '{{ item }}'
+    state: 'present'
+  with_items:
+    - '{{ pgsql_exporter_packages }}'
+
+- name: postgres_exporter configure file transfer
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+  with_items:
+    - { src: 'postgres_exporter', dest: '/etc/default/' }    
+  register: result
+
+- name: Ensure postgres_exporter service is enabled
+  systemd:
+    name: 'postgres_exporter.service'
+    enabled: 'yes'
+    state: 'started'
+    daemon_reload: yes
+  when:
+    - result.changed
+
+- name: Ensure Prometheus firewall port is allow
+  firewalld:
+    port: '{{ pgsql_exporter_port }}'
+    permanent: 'true'
+    state: 'enabled'
+  register: result
+  when: 
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version|int > 6
+
+- name: Reload firewalld service
+  service:
+    name: firewalld
+    state: reloaded
+  when: result.changed

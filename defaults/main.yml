@@ -5,6 +5,7 @@ db_sa_pass: 'password'
 pgsql_mailto: 'somebody@example.com'
 pgsql_path: '/data'
 pgsql_port: '5432/tcp'
+pgsql_exporter_port: '9187/tcp'
 pgsql_listen_addresses: "'0.0.0.0'"
 pgsql_checkpoint_completion_target: '0.9'
 pgsql_wal_buffers: '16MB'
