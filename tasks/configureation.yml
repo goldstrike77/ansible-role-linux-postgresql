@@ -13,11 +13,11 @@
     dest: '{{ item.dest }}'
     owner: postgres
     group: postgres
-    mode: 0755
+    mode: '{{ item.mode }}'
   with_items:
-    - { src: '.pgpass', dest: '/var/lib/pgsql/.pgpass' }
-    - { src: 'pgbackrest.conf', dest: '/etc/pgbackrest.conf' }
-    - { src: 'pgBackRest-runner.sh', dest: '/usr/local/bin/pgBackRest-runner.sh' }
+    - { src: '.pgpass', dest: '/var/lib/pgsql/.pgpass', mode: '0600' }
+    - { src: 'pgbackrest.conf', dest: '/etc/pgbackrest.conf', mode: '0755' }
+    - { src: 'pgBackRest-runner.sh', dest: '/usr/local/bin/pgBackRest-runner.sh', mode: '0755' }
 
 - name: 'Modify the {{ pgsql_releases }} default data folder'
   lineinfile:
@@ -52,10 +52,10 @@
     password: '{{ db_sa_pass|default(omit,true) }}'
   no_log: true
 
-- name: 'Create the {{ pgsql_releases } backup stanza'
+- name: 'Create the {{ pgsql_releases }} backup stanza'
   shell: /bin/su - {{ pgsql_user }} -c "pgbackrest --stanza=database --log-level-console=info stanza-create"
 
-- name : '{{ pgsql_releases } backup job'
+- name : '{{ pgsql_releases }} backup job'
   cron:
     name: '{{ pgsql_releases }} backup job'
     user: postgres
