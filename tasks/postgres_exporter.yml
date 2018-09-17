@@ -14,6 +14,16 @@
   with_items:
     - '{{ pgsql_exporter_packages }}'
 
+- name: 'Add postgres_exporter data source'
+  lineinfile:
+    state: present
+    dest: '/usr/lib/systemd/system/postgres_exporter.service'
+    insertafter: '^\[Service\]'
+    regexp: '^Environment='
+    line: 'Environment="DATA_SOURCE_NAME=postgresql://postgres:{{ db_sa_pass }}@127.0.0.1:5432/postgres?sslmode=disable"'
+  no_log: true
+  register: systemd_update
+
 - name: postgres_exporter configure file transfer
   template:
     src: '{{ item.src }}'
@@ -23,7 +33,7 @@
     mode: 0644
   with_items:
     - { src: 'postgres_exporter', dest: '/etc/default/' }    
-  register: result
+  register: conf_update
 
 - name: Ensure postgres_exporter service is enabled
   systemd:
@@ -32,7 +42,7 @@
     state: 'started'
     daemon_reload: yes
   when:
-    - result.changed
+    - systemd_update.changed or conf_update.changed
 
 - name: Ensure Prometheus firewall port is allow
   firewalld:

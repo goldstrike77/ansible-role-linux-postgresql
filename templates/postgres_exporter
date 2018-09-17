@@ -1,1 +1,1 @@
-POSTGRES_EXPORTER_EXPORTER_OPTS='--log.format="logger:syslog?appname=postgres_exporter&local=7" postgresql://postgres:{{ db_sa_pass }}@127.0.0.1:5432/postgres?sslmode=disable'
+POSTGRES_EXPORTER_EXPORTER_OPTS='--log.format="logger:syslog?appname=postgres_exporter&local=7"'
