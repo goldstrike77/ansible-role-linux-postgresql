@@ -1,10 +1,10 @@
 ---
 - name: 'Add PostgreSQL YUM repositories'
   yum_repository:
-    name: '{{ vars["pgsql_releases" + _repo_name] }}'
-    description: '{{ vars["pgsql_releases" + _repo_name] }} YUM repository'
-    file: '{{ vars["pgsql_releases" + _repo_name] }}'
-    baseurl: '{{ vars["pgsql_releases" + _repo_url] }}'
+    name: '{{ vars[pgsql_releases + "_repo_name"] }}'
+    description: '{{ vars[pgsql_releases + "_repo_name"] }} YUM repository'
+    file: '{{ vars[pgsql_releases + "_repo_name"] }}'
+    baseurl: '{{ vars[pgsql_releases + "_repo_url"] }}'
     gpgcheck: no
 
 - name: Install the PostgreSQL packages
