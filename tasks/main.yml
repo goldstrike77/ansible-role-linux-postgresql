@@ -5,7 +5,7 @@
 - name: Include tasks for specific OS
   include: '{{ ansible_os_family }}.yml'
 
-- name: 'Creating {{ pgsql_releases }} folder'
+- name: 'Creating PostgreSQL folder'
   file:
     dest: '{{ item }}'
     state: directory
@@ -15,7 +15,7 @@
   with_items:
     - '{{ pgsql_folder }}'
 
-- name: 'Configure {{ pgsql_releases }} kernel parameters'
+- name: 'Configure PostgreSQL kernel parameters'
   sysctl:
     name: '{{ item.variable }}'
     value: '{{ item.value }}'
@@ -26,27 +26,27 @@
   with_items:
     - '{{ pgsql_kernel_parameters }}'
 
-- name: 'Set system-wide PATH parameters'
+- name: 'Set PostgreSQL system-wide PATH parameters'
   lineinfile: 
     dest: '/etc/profile'
     line: "export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:{% if pgsql_releases == 'PostgresPro' %}/usr/pgpro-9.6/bin{% else %}/usr/pgsql-9.6/bin{% endif %}"
 
-- name: 'Check if {{ pgsql_releases }} tablespace exists'
+- name: 'Check if PostgreSQL tablespace exists'
   stat:
     path: '{{ item }}'
   with_items:
     - '{{ pgsql_path }}/pgsql/PG_VERSION'
   register: result
 
-- name: 'Initializes the {{ pgsql_releases }} system tables'
+- name: 'Initializes the PostgreSQL system tables'
   shell: /bin/su - {{ pgsql_user }} -c "initdb -D {{ pgsql_path }}/pgsql"
   when: 
     - not result.results[0].stat.exists
   register: result
 
-- name: 'Configure {{ pgsql_releases }}'
+- name: 'Configure PostgreSQL'
   include: configureation.yml
   when: result|changed
 
-- name: 'Install {{ pgsql_releases }} prometheus exporter'
+- name: 'Install PostgreSQL prometheus exporter'
   include: 'postgres_exporter.yml'

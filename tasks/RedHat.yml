@@ -1,34 +1,18 @@
 ---
-- name: Add PostgreSQL YUM repositories
+- name: 'Add PostgreSQL YUM repositories'
   yum_repository:
-    name: '{{ pgsql_repo_name }}'
-    description: '{{ pgsql_repo_name }} YUM repository'
-    file: '{{ pgsql_repo_name }}'
-    baseurl: '{{ pgsql_repo_url }}'
+    name: '{{ vars["pgsql_releases" + _repo_name] }}'
+    description: '{{ vars["pgsql_releases" + _repo_name] }} YUM repository'
+    file: '{{ vars["pgsql_releases" + _repo_name] }}'
+    baseurl: '{{ vars["pgsql_releases" + _repo_url] }}'
     gpgcheck: no
-
-- name: Add PostgresPro YUM repositories
-  yum_repository:
-    name: '{{ pgpro_repo_name }}'
-    description: '{{ pgpro_repo_name }} YUM repository'
-    file: '{{ pgpro_repo_name }}'
-    baseurl: '{{ pgpro_repo_url }}'
-    gpgcheck: no
-  when: pgsql_releases == 'PostgresPro'
 
 - name: Install the PostgreSQL packages
   yum:
-    name: '{{ ",".join(vars["pgsql_packages_" + pgsql_version]) }}'
+    name: '{{ ",".join(vars[pgsql_releases + "_packages_" + pgsql_version]) }}'
     state: 'present'
-  when: pgsql_releases == 'PostgreSQL'
 
-- name: Install the PostgresPro packages
-  yum:
-    name: '{{ ",".join(vars["pgpro_packages_" + pgsql_version]) }}'
-    state: 'present'
-  when: pgsql_releases == 'PostgresPro'
-
-- name: 'Ensure {{ pgsql_releases }} firewall port is allow'
+- name: 'Ensure PostgreSQL firewall port is allow'
   firewalld:
     port: '{{ item }}'
     permanent: 'true'

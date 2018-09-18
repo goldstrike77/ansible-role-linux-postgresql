@@ -51,5 +51,6 @@ pgsql_conf_parameter:
   - { regexp: '^lc_messages ', line: 'lc_messages = {{ pgsql_lc_messages }}' }
   - { regexp: '^wal_level ', line: 'wal_level = {{ pgsql_wal_level }}' }
   - { regexp: '^archive_mode ', line: 'archive_mode = {{ pgsql_archive_mode }}' }
-  - { regexp: '^archive_command ', line: 'archive_command = {{ pgsql_archive_command }}' }
   - { regexp: '^max_wal_senders ', line: 'max_wal_senders = {{ pgsql_max_wal_senders }}' }
+  - { regexp: '^hot_standby ', line: 'hot_standby = {{ pgsql_hot_standby }}' }
+  - { regexp: '^full_page_writes ', line: 'full_page_writes = {{ pgsql_full_page_writes }}' }

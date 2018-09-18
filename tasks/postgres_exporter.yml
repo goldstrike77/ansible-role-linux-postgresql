@@ -1,5 +1,5 @@
 ---
-- name: Add postgres_exporter YUM repositories
+- name: Add PostgreSQL prometheus exporter YUM repositories
   yum_repository:
     name: '{{ pgsql_exporter_repo_name }}'
     description: '{{ pgsql_exporter_repo_name }} YUM repository'
@@ -7,14 +7,14 @@
     baseurl: '{{ pgsql_exporter_repo_url }}'
     gpgcheck: no
 
-- name: Install the postgres_exporter packages
+- name: Install the PostgreSQL prometheus exporter
   yum:
     name: '{{ item }}'
     state: 'present'
   with_items:
     - '{{ pgsql_exporter_packages }}'
 
-- name: 'Add postgres_exporter data source'
+- name: 'Add PostgreSQL prometheus exporter data source'
   lineinfile:
     state: present
     dest: '/usr/lib/systemd/system/postgres_exporter.service'
@@ -24,7 +24,7 @@
   no_log: true
   register: systemd_update
 
-- name: postgres_exporter configure file transfer
+- name: PostgreSQL prometheus exporter configure file transfer
   template:
     src: '{{ item.src }}'
     dest: '{{ item.dest }}'
@@ -35,7 +35,7 @@
     - { src: 'postgres_exporter', dest: '/etc/default/' }    
   register: conf_update
 
-- name: Ensure postgres_exporter service is enabled
+- name: Ensure PostgreSQL prometheus exporter service is enabled
   systemd:
     name: 'postgres_exporter.service'
     enabled: 'yes'
@@ -44,7 +44,7 @@
   when:
     - systemd_update.changed or conf_update.changed
 
-- name: Ensure Prometheus firewall port is allow
+- name: Ensure PostgreSQL prometheus exporter firewall port is allow
   firewalld:
     port: '{{ pgsql_exporter_port }}'
     permanent: 'true'

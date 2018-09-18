@@ -1,6 +1,6 @@
 ---
 #pgsql_version: '96' # 9.6 / 10
-pgsql_releases: 'PostgreSQL' # PostgreSQL / PostgresPro
+pgsql_releases: 'pgsql' # pgsql for PostgreSQL / pgpro for PostgresPro
 db_sa_pass: 'password'
 pgsql_mailto: 'somebody@example.com'
 pgsql_path: '/data'
@@ -32,4 +32,5 @@ pgsql_lc_messages: 'C'
 pgsql_max_wal_senders: '3'
 pgsql_wal_level: 'logical'
 pgsql_archive_mode: 'on'
-pgsql_archive_command: "'/bin/pgbackrest --stanza=database archive-push %p'"
+pgsql_hot_standby: 'on'
+pgsql_full_page_writes: 'on'
