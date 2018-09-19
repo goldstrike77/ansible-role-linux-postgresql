@@ -44,9 +44,12 @@
     - not result.results[0].stat.exists
   register: result
 
-- name: 'Configure PostgreSQL'
-  include: configureation.yml
+- name: 'Include specific tasks for {{ pgsql_releases }} release'
+  include: '{{ pgsql_releases }}.yml'
   when: result|changed
+
+- name: Force the handler to run immediately
+  meta: flush_handlers
 
 - name: 'Install PostgreSQL prometheus exporter'
   include: 'postgres_exporter.yml'
