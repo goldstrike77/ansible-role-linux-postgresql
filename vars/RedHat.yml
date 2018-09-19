@@ -7,7 +7,7 @@ pgsql_exporter_packages: 'postgres_exporter'
 
 # PostgreSQL Repository
 pgsql_repo_name: "postgresql"
-pgsql_repo_url: "http://download.postgresql.org/pub/repos/yum/{{ pgsql_version | regex_replace('96', '9.6') }}/redhat/rhel-$releasever-$basearch"
+pgsql_repo_url: http://download.postgresql.org/pub/repos/yum/{{ pgsql_version }}/redhat/rhel-$releasever-$basearch
 pgsql_packages_96:
   - 'pgbackrest'
   - 'postgresql96-contrib'
@@ -21,7 +21,7 @@ pgsql_packages_96:
 
 # PostgresPro Repository
 pgpro_repo_name: "postgrespro"
-pgpro_repo_url: http://repo.postgrespro.ru/pgpro-{{ pgsql_version | regex_replace("96", "9.6") }}/{{ ansible_distribution | lower }}/$releasever/os/$basearch/rpms
+pgpro_repo_url: 'http://repo.postgrespro.ru/pgpro-{{ pgsql_version | regex_replace("96", "9.6") }}/{{ ansible_distribution | lower }}/$releasever/os/$basearch/rpms'
 pgpro_packages_96:
   - 'postgrespro96-contrib'
   - 'postgrespro96-libs'
