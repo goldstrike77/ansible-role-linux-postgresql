@@ -1,42 +1,40 @@
 ---
-- name: 'Server parameter Configuration'
-  lineinfile:
-    state: present
-    dest: '{{ pgsql_path }}/pgsql/postgresql.conf'
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
-  with_items:
-    - '{{ pgsql_conf_parameter }}'
-
-- name: 'Modify the default data folder'
-  lineinfile:
-    state: present
-    dest: '/lib/systemd/system/{% if pgsql_releases == "PostgresPro" %}postgrespro{% else %}postgresql{% endif %}-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
-    insertafter: '^\[Service\]'
-    regexp: '^Environment=PGDATA'
-    line: 'Environment=PGDATA={{ pgsql_path }}/pgsql'
-
-- name: 'Changing Limits for services'
-  lineinfile:
-    state: present
-    dest: '/lib/systemd/system/{% if pgsql_releases == "PostgresPro" %}postgrespro{% else %}postgresql{% endif %}-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
-    insertafter: '^\[Service\]'
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
-  with_items:
-    - '{{ pgsql_service_parameter }}'
-
-- name: 'Ensure service is enabled'
-  systemd:
-    name: '{% if pgsql_releases == "PostgresPro" %}postgrespro{% else %}postgresql{% endif %}-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
-    enabled: yes
-    state: started
-    daemon_reload: yes
-  when:
-    - ansible_distribution_major_version|int > 6
-
-- name: 'Change default password'
-  postgresql_user:
-    user: 'postgres'
-    password: '{{ db_sa_pass|default(omit,true) }}'
-  no_log: true
+- block:
+  - name: 'Server parameter Configuration'
+    lineinfile:
+      state: present
+      dest: '{{ pgsql_path }}/pgsql/postgresql.conf'
+      regexp: '{{ item.regexp }}'
+      line: '{{ item.line }}'
+    with_items:
+      - '{{ pgsql_conf_parameter }}'
+  - name: 'Modify the default data folder'
+    lineinfile:
+      state: present
+      dest: '/lib/systemd/system/{% if pgsql_releases == "PostgresPro" %}postgrespro{% else %}postgresql{% endif %}-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+      insertafter: '^\[Service\]'
+      regexp: '^Environment=PGDATA'
+      line: 'Environment=PGDATA={{ pgsql_path }}/pgsql'
+  - name: 'Changing Limits for services'
+    lineinfile:
+      state: present
+      dest: '/lib/systemd/system/{% if pgsql_releases == "PostgresPro" %}postgrespro{% else %}postgresql{% endif %}-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+      insertafter: '^\[Service\]'
+      regexp: '{{ item.regexp }}'
+      line: '{{ item.line }}'
+    with_items:
+      - '{{ pgsql_service_parameter }}'
+  - name: 'Ensure service is enabled'
+    systemd:
+      name: '{% if pgsql_releases == "PostgresPro" %}postgrespro{% else %}postgresql{% endif %}-{{ pgsql_version | regex_replace("96", "9.6") }}.service'
+      enabled: yes
+      state: started
+      daemon_reload: yes
+    when:
+      - ansible_distribution_major_version|int > 6
+  - name: 'Change default password'
+    postgresql_user:
+      user: 'postgres'
+      password: '{{ db_sa_pass|default(omit,true) }}'
+    no_log: true
+  listen: 'PostgreSQL Server System configuration'

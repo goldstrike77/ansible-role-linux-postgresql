@@ -48,8 +48,13 @@
   include: '{{ pgsql_releases }}.yml'
   when: result|changed
 
-- name: Force the handler to run immediately
-  meta: flush_handlers
-
 - name: 'Install PostgreSQL prometheus exporter'
   include: 'postgres_exporter.yml'
+
+- name: Ensure MTA service is enabled
+  systemd:
+    name: 'postfix.service'
+    enabled: 'yes'
+    state: 'started'
+  when:
+    - ansible_distribution_major_version|int > 6

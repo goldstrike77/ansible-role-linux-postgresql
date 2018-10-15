@@ -14,12 +14,11 @@
   shell: /bin/su - {{ pgsql_user }} -c "pgbackrest --stanza=database --log-level-console=info stanza-create"
 
 - name: PostgreSQL configuration
-  notify:
-  - 'Server parameter Configuration'
-  - 'Modify the default data folder'
-  - 'Changing Limits for services'
-  - 'Ensure service is enabled'
-  - 'Change default password'
+  shell: echo ''
+  notify: 'PostgreSQL Server System configuration'
+
+- name: Force the handler to run immediately
+  meta: flush_handlers
 
 - name : 'PostgreSQL backup job'
   cron:
@@ -28,11 +27,3 @@
     minute: "{{ 59 |random}}"
     hour: "{{ (( inventory_hostname | hash | list | map('int',0,16) | sum ) % 2) + 1 }}"
     job: "/usr/local/bin/pgBackRest-runner.sh"
-
-- name: Ensure MTA service is enabled
-  systemd:
-    name: 'postfix.service'
-    enabled: 'yes'
-    state: 'started'
-  when:
-    - ansible_distribution_major_version|int > 6
