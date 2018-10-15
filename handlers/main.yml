@@ -1,5 +1,5 @@
 ---
-- name: PostgreSQL Server System configuration
+- name: 'PostgreSQL Server System configuration'
   block:
     - name: 'Server parameter Configuration'
       lineinfile:
