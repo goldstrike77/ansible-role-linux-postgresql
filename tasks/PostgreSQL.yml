@@ -10,15 +10,15 @@
     - { src: 'pgbackrest.conf', dest: '/etc/pgbackrest.conf', mode: '0755' }
     - { src: 'pgBackRest-runner.sh', dest: '/usr/local/bin/pgBackRest-runner.sh', mode: '0755' }
 
-- name: 'Create the PostgreSQL backup stanza'
-  shell: /bin/su - {{ pgsql_user }} -c "pgbackrest --stanza=database --log-level-console=info stanza-create"
-
 - name: PostgreSQL configuration
   shell: echo ''
   notify: 'PostgreSQL Server System configuration'
 
 - name: Force the handler to run immediately
   meta: flush_handlers
+
+- name: 'Create the PostgreSQL backup stanza'
+  shell: /bin/su - {{ pgsql_user }} -c "pgbackrest --stanza=database --log-level-console=info stanza-create"
 
 - name : 'PostgreSQL backup job'
   cron:
