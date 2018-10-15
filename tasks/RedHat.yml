@@ -31,11 +31,9 @@
 
 - name: 'Ensure {{ pgsql_releases }} firewall port is allow'
   firewalld:
-    port: '{{ item }}'
+    port: '{{ pgsql_port }}/tcp'
     permanent: 'true'
     state: 'enabled'
-  with_items:
-    - '{{ pgsql_port }}'
   when:
     - ansible_distribution_major_version|int > 6
   register: result
