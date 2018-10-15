@@ -1,7 +1,7 @@
 ---
 # General parameters #
 #pgsql_version: '96' # 9.6 / 10
-pgsql_releases: 'PostgreSQL' # PostgreSQL / PostgresPro
+pgsql_releases: 'PostgreSQL' # pgsql for PostgreSQL / pgpro for PostgresPro
 db_sa_pass: 'password'
 pgsql_mailto: 'somebody@example.com'
 
