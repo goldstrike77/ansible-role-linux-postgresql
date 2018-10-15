@@ -1,5 +1,6 @@
 ---
-- block:
+- name: PostgreSQL Server System configuration
+  block:
     - name: 'Server parameter Configuration'
       lineinfile:
         state: present
@@ -37,4 +38,3 @@
         user: 'postgres'
         password: '{{ db_sa_pass|default(omit,true) }}'
       no_log: true
-  listen: 'PostgreSQL Server System configuration'
