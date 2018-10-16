@@ -19,38 +19,39 @@ pgsql_kernel_parameters:
   - { variable: 'vm.swappiness', value: '10' }
 
 pgsql_conf_parameter:
-  - { regexp: '^listen_addresses ', line: 'listen_addresses = {{ pgsql_listen_addresses }}' }
-  - { regexp: '^max_connections ', line: 'max_connections = {% if ansible_memtotal_mb > 4096 and ansible_memtotal_mb <= 8192 %}210{% elif ansible_memtotal_mb > 8192 and ansible_memtotal_mb <= 16384 %}310{% elif ansible_memtotal_mb > 16384 and ansible_memtotal_mb <= 32768 %}510{% elif ansible_memtotal_mb > 32768 %}610{% else %}50{% endif %}' }
-  - { regexp: '^shared_buffers ', line: 'shared_buffers = {{ (ansible_memtotal_mb * 0.25)|int }}MB' }
-  - { regexp: '^effective_cache_size ', line: 'effective_cache_size = {{ (ansible_memtotal_mb * 0.75)|int }}MB' }
-  - { regexp: '^maintenance_work_mem ', line: 'maintenance_work_mem = {{ (ansible_memtotal_mb * 0.0625)|int }}MB' }
+  - { regexp: '^archive_mode ', line: 'archive_mode = {{ pgsql_archive_mode }}' }
+  - { regexp: '^archive_command ', line: 'archive_command = {% if pgsql_releases == "PostgreSQL" %}"/bin/pgbackrest --stanza=database archive-push %p"{% elif pgsql_releases == "PostgresPro" %}""{% else %}""{% endif %}' }
   - { regexp: '^checkpoint_completion_target ', line: 'checkpoint_completion_target = {{ pgsql_checkpoint_completion_target }}' }
-  - { regexp: '^wal_buffers ', line: 'wal_buffers = {{ pgsql_wal_buffers }}' }
-  - { regexp: '^default_statistics_target ', line: 'default_statistics_target = {{ pgsql_default_statistics_target }}' }
-  - { regexp: '^random_page_cost ', line: 'random_page_cost = {{ pgsql_random_page_cost }}' }
-  - { regexp: '^effective_io_concurrency ', line: 'effective_io_concurrency = {{ pgsql_effective_io_concurrency }}' }
-  - { regexp: '^work_mem ', line: 'work_mem = {{ (ansible_memtotal_mb * 0.0004 * 1024 )|int }}kB' }
-  - { regexp: '^min_wal_size ', line: 'min_wal_size = {{ pgsql_min_wal_size }}' }
-  - { regexp: '^max_wal_size ', line: 'max_wal_size = {{ pgsql_max_wal_size }}' }
-  - { regexp: '^max_worker_processes ', line: 'max_worker_processes = {{ ansible_processor_vcpus }}' }
-  - { regexp: '^max_parallel_workers_per_gather ', line: 'max_parallel_workers_per_gather = {% if (ansible_processor_vcpus * 0.5)|int < 1 %}1{% else %}{{ (ansible_processor_vcpus * 0.5)|int }}{% endif %}' }
-  - { regexp: '^fsync ', line: 'fsync = {{ pgsql_fsync }}' }
-  - { regexp: '^synchronous_commit ', line: 'synchronous_commit = {{ pgsql_synchronous_commit }}' }
   - { regexp: '^commit_delay ', line: 'commit_delay = {{ pgsql_commit_delay }}' }
   - { regexp: '^commit_siblings ', line: 'commit_siblings = {{ pgsql_commit_siblings }}' }
-  - { regexp: '^log_line_prefix ', line: 'log_line_prefix = {{ pgsql_log_line_prefix }}' }
-  - { regexp: '^log_lock_waits ', line: 'log_lock_waits = {{ pgsql_log_lock_waits }}' }
-  - { regexp: '^log_statement ', line: 'log_statement = {{ pgsql_log_statement }}' }
-  - { regexp: '^log_temp_files ', line: 'log_temp_files = {{ pgsql_log_temp_files }}' }
-  - { regexp: '^log_timezone ', line: 'log_timezone = {{ pgsql_log_timezone }}' }
-  - { regexp: '^log_min_duration_statement ', line: 'log_min_duration_statement = {{ pgsql_log_min_duration_statement }}' }
+  - { regexp: '^default_statistics_target ', line: 'default_statistics_target = {{ pgsql_default_statistics_target }}' }
+  - { regexp: '^effective_cache_size ', line: 'effective_cache_size = {{ (ansible_memtotal_mb * 0.75)|int }}MB' }
+  - { regexp: '^effective_io_concurrency ', line: 'effective_io_concurrency = {{ pgsql_effective_io_concurrency }}' }
+  - { regexp: '^fsync ', line: 'fsync = {{ pgsql_fsync }}' }
+  - { regexp: '^full_page_writes ', line: 'full_page_writes = {{ pgsql_full_page_writes }}' }
+  - { regexp: '^hot_standby ', line: 'hot_standby = {{ pgsql_hot_standby }}' }
+  - { regexp: '^lc_messages ', line: 'lc_messages = {{ pgsql_lc_messages }}' }
+  - { regexp: '^listen_addresses ', line: 'listen_addresses = {{ pgsql_listen_addresses }}' }
+  - { regexp: '^log_autovacuum_min_duration ', line: 'log_autovacuum_min_duration = {{ pgsql_log_autovacuum_min_duration }}' }
   - { regexp: '^log_checkpoints ', line: 'log_checkpoints = {{ pgsql_log_checkpoints }}' }
   - { regexp: '^log_connections ', line: 'log_connections = {{ pgsql_log_connections }}' }
   - { regexp: '^log_disconnections ', line: 'log_disconnections = {{ pgsql_log_disconnections }}' }
-  - { regexp: '^log_autovacuum_min_duration ', line: 'log_autovacuum_min_duration = {{ pgsql_log_autovacuum_min_duration }}' }
-  - { regexp: '^lc_messages ', line: 'lc_messages = {{ pgsql_lc_messages }}' }
-  - { regexp: '^wal_level ', line: 'wal_level = {{ pgsql_wal_level }}' }
-  - { regexp: '^archive_mode ', line: 'archive_mode = {{ pgsql_archive_mode }}' }
+  - { regexp: '^log_line_prefix ', line: 'log_line_prefix = {{ pgsql_log_line_prefix }}' }
+  - { regexp: '^log_lock_waits ', line: 'log_lock_waits = {{ pgsql_log_lock_waits }}' }
+  - { regexp: '^log_min_duration_statement ', line: 'log_min_duration_statement = {{ pgsql_log_min_duration_statement }}' }
+  - { regexp: '^log_statement ', line: 'log_statement = {{ pgsql_log_statement }}' }
+  - { regexp: '^log_temp_files ', line: 'log_temp_files = {{ pgsql_log_temp_files }}' }
+  - { regexp: '^log_timezone ', line: 'log_timezone = {{ pgsql_log_timezone }}' }
+  - { regexp: '^maintenance_work_mem ', line: 'maintenance_work_mem = {{ (ansible_memtotal_mb * 0.0625)|int }}MB' }
+  - { regexp: '^max_connections ', line: 'max_connections = {% if ansible_memtotal_mb > 4096 and ansible_memtotal_mb <= 8192 %}210{% elif ansible_memtotal_mb > 8192 and ansible_memtotal_mb <= 16384 %}310{% elif ansible_memtotal_mb > 16384 and ansible_memtotal_mb <= 32768 %}510{% elif ansible_memtotal_mb > 32768 %}610{% else %}50{% endif %}' }
+  - { regexp: '^max_parallel_workers_per_gather ', line: 'max_parallel_workers_per_gather = {% if (ansible_processor_vcpus * 0.5)|int < 1 %}1{% else %}{{ (ansible_processor_vcpus * 0.5)|int }}{% endif %}' }
   - { regexp: '^max_wal_senders ', line: 'max_wal_senders = {{ pgsql_max_wal_senders }}' }
-  - { regexp: '^hot_standby ', line: 'hot_standby = {{ pgsql_hot_standby }}' }
-  - { regexp: '^full_page_writes ', line: 'full_page_writes = {{ pgsql_full_page_writes }}' }
+  - { regexp: '^max_wal_size ', line: 'max_wal_size = {{ pgsql_max_wal_size }}' }
+  - { regexp: '^max_worker_processes ', line: 'max_worker_processes = {{ ansible_processor_vcpus }}' }
+  - { regexp: '^min_wal_size ', line: 'min_wal_size = {{ pgsql_min_wal_size }}' }
+  - { regexp: '^random_page_cost ', line: 'random_page_cost = {{ pgsql_random_page_cost }}' }
+  - { regexp: '^shared_buffers ', line: 'shared_buffers = {{ (ansible_memtotal_mb * 0.25)|int }}MB' }
+  - { regexp: '^synchronous_commit ', line: 'synchronous_commit = {{ pgsql_synchronous_commit }}' }
+  - { regexp: '^wal_buffers ', line: 'wal_buffers = {{ pgsql_wal_buffers }}' }
+  - { regexp: '^wal_level ', line: 'wal_level = {{ pgsql_wal_level }}' }
+  - { regexp: '^work_mem ', line: 'work_mem = {{ (ansible_memtotal_mb * 0.0004 * 1024 )|int }}kB' }
