@@ -20,7 +20,7 @@ pgsql_kernel_parameters:
 
 pgsql_conf_parameter:
   - { regexp: '^archive_mode ', line: 'archive_mode = {{ pgsql_archive_mode }}' }
-  - { regexp: '^archive_command ', line: 'archive_command = {% if pgsql_releases == "PostgreSQL" %}"/bin/pgbackrest --stanza=database archive-push %p"{% elif pgsql_releases == "PostgresPro" %}""{% else %}""{% endif %}' }
+  - { regexp: '^archive_command ', line: "archive_command = {% if pgsql_releases == 'PostgreSQL' %}'/bin/pgbackrest --stanza=database archive-push %p'{% elif pgsql_releases == 'PostgresPro' %}''{% else %}''{% endif %}" }
   - { regexp: '^checkpoint_completion_target ', line: 'checkpoint_completion_target = {{ pgsql_checkpoint_completion_target }}' }
   - { regexp: '^commit_delay ', line: 'commit_delay = {{ pgsql_commit_delay }}' }
   - { regexp: '^commit_siblings ', line: 'commit_siblings = {{ pgsql_commit_siblings }}' }
