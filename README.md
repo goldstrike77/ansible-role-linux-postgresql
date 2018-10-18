@@ -9,7 +9,7 @@ Requirements
 ------------
 
 Operating systems
-  - CentOS 7
+  - CentOS 6 or higher
 
 Role Variables
 --------------
