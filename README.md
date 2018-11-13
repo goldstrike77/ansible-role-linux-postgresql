@@ -1,7 +1,7 @@
 ansible-role-linux-postgresql
-=========
+=============================
 
-Do not use in production environment.
+Testing and development purposes only, should not be used in a production environment.
 
 Install and configure PostgreSQL on linux operating system.
 
