@@ -4,7 +4,7 @@ pgsql_group: 'postgres'
 
 pgsql_folder:
   - '{{ pgsql_path }}/pgsql'
-  - '{{ pgsql_path }}/backup'
+  - '{{ pgsql_path }}/pgsql_backup'
 
 pgsql_service_parameter:
   - { regexp: '^LimitMEMLOCK', line: 'LimitMEMLOCK = infinity' }
