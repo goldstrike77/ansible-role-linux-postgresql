@@ -1,0 +1,7 @@
+---
+- name: PostgreSQL configuration
+  shell: echo ''
+  notify: 'PostgreSQL Server System configuration'
+
+- name: Force the handler to run immediately
+  meta: flush_handlers
