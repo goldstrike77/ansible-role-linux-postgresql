@@ -17,6 +17,7 @@ pgsql_kernel_parameters:
   - { variable: 'vm.dirty_ratio', value: '80' }
   - { variable: 'vm.dirty_background_ratio', value: '5' }
   - { variable: 'vm.swappiness', value: '10' }
+  - { variable: 'kernel.sem', value: '50100 128256000 50100 2560' }
 
 pgsql_conf_parameter:
   - { regexp: '^archive_mode ', line: 'archive_mode = {{ pgsql_archive_mode }}' }
