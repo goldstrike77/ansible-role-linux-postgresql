@@ -25,7 +25,7 @@
         gpgcheck: no
     - name: Install the {{ pgsql_releases }} packages
       yum:
-        name: '{{ ",".join(vars["pgpro_packages_" + pgpro_version]) }}'
+        name: '{{ ",".join(vars["pgpro_packages_" + pgsql_version]) }}'
         state: 'present'
   when: pgsql_releases == 'PostgresPro'
 
