@@ -26,7 +26,7 @@ pgsql_conf_parameter:
   - { regexp: '^commit_delay ', line: 'commit_delay = {{ pgsql_commit_delay }}' }
   - { regexp: '^commit_siblings ', line: 'commit_siblings = {{ pgsql_commit_siblings }}' }
   - { regexp: '^default_statistics_target ', line: 'default_statistics_target = {{ pgsql_default_statistics_target }}' }
-  - { regexp: '^effective_cache_size ', line: 'effective_cache_size = {{ (ansible_memtotal_mb * 0.75)|int }}MB' }
+  - { regexp: '^effective_cache_size ', line: 'effective_cache_size = {{ (ansible_memtotal_mb * 0.60)|int }}MB' }
   - { regexp: '^effective_io_concurrency ', line: 'effective_io_concurrency = {{ pgsql_effective_io_concurrency }}' }
   - { regexp: '^fsync ', line: 'fsync = {{ pgsql_fsync }}' }
   - { regexp: '^full_page_writes ', line: 'full_page_writes = {{ pgsql_full_page_writes }}' }
@@ -51,7 +51,7 @@ pgsql_conf_parameter:
   - { regexp: '^max_worker_processes ', line: 'max_worker_processes = {{ ansible_processor_vcpus }}' }
   - { regexp: '^min_wal_size ', line: 'min_wal_size = {{ pgsql_min_wal_size }}' }
   - { regexp: '^random_page_cost ', line: 'random_page_cost = {{ pgsql_random_page_cost }}' }
-  - { regexp: '^shared_buffers ', line: 'shared_buffers = {{ (ansible_memtotal_mb * 0.25)|int }}MB' }
+  - { regexp: '^shared_buffers ', line: 'shared_buffers = {{ (ansible_memtotal_mb * 0.40)|int }}MB' }
   - { regexp: '^synchronous_commit ', line: 'synchronous_commit = {{ pgsql_synchronous_commit }}' }
   - { regexp: '^wal_buffers ', line: 'wal_buffers = {{ pgsql_wal_buffers }}' }
   - { regexp: '^wal_level ', line: 'wal_level = {{ pgsql_wal_level }}' }
