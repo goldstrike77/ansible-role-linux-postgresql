@@ -4,6 +4,13 @@
 pgsql_releases: 'PostgreSQL' # pgsql for PostgreSQL / pgpro for PostgresPro
 db_sa_pass: 'password'
 pgsql_mailto: 'somebody@example.com'
+environments: 'SIT'
+consul_is_register: false
+consul_exporter_token: '00000000-0000-0000-0000-000000000000'
+consul_clients:
+  - '1.1.1.1'
+  - '1.1.1.2'
+consul_http_port: '8500'
 
 # Listen port #
 pgsql_port: '5432' # PostgreSQL instance
