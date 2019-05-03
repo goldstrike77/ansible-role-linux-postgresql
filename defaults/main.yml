@@ -1,48 +1,49 @@
 ---
 # General parameters #
-#pgsql_version: '96' # 9.6 / 10
+pgsql_is_install: false # A boolean value, whether install the PostgreSQL.
+pgsql_version: '96' # Specify the PostgreSQL version.
 pgsql_releases: 'PostgreSQL' # pgsql for PostgreSQL / pgpro for PostgresPro
-db_sa_pass: 'password'
-pgsql_mailto: 'somebody@example.com'
-environments: 'SIT'
-consul_is_register: false
-consul_exporter_token: '00000000-0000-0000-0000-000000000000'
-consul_clients:
-  - '1.1.1.1'
-  - '1.1.1.2'
-consul_http_port: '8500'
+pgsql_sa_pass: 'password' # PostgreSQL root account password
+pgsql_mailto: 'somebody@example.com' # PostgreSQL report mail recipient
+
+# Service Mesh #
+environments: 'SIT' # Define the service environment.
+consul_is_register: false # Whether register a client service with consul.
+consul_exporter_token: '00000000-0000-0000-0000-000000000000' # Consul client ACL token.
+consul_clients: 'localhost' # List of consul clients.
+consul_http_port: '8500' # The consul HTTP API port.
 
 # Listen port #
-pgsql_port: '5432' # PostgreSQL instance
-pgsql_exporter_port: '9187' # Prometheus exporter
+pgsql_port: '5432' # PostgreSQL instance communication ports.
+pgsql_exporter_port: '9187' # Prometheus exporter communication ports.
 
 # Server System Variables #
-pgsql_path: '/data' # Specify the PostgreSQL data directory
-pgsql_archive_mode: 'on' # Completed WAL segments are sent to archive storage when archive_mode is enabled
-pgsql_checkpoint_completion_target: '0.9' # Specifies the target of checkpoint completion
-pgsql_commit_delay: '10' # Time delay before a WAL flush is initiated in microseconds
-pgsql_commit_siblings: '5' # Minimum number of concurrent open transactions to require before performing the commit_delay
-pgsql_default_statistics_target: '100' # Default statistics target for table columns without a column-specific target set via ALTER TABLE SET STATISTICS
-pgsql_effective_io_concurrency: '2' # Number of concurrent disk I/O operations that PostgreSQL expects can be executed simultaneously
-pgsql_fsync: 'off' # Turning off often a performance benefit
-pgsql_full_page_writes: 'on' # Writes the entire content of each disk page to WAL during the first modification of that page after a checkpoint
-pgsql_hot_standby: 'on' # Specifies whether or not you can connect and run queries during recovery
-pgsql_lc_messages: 'C' # The language of system messages
-pgsql_listen_addresses: "'0.0.0.0'" # Specifies the TCP/IP address(es) on which the server is to listen
-pgsql_log_autovacuum_min_duration: '0' # Executed by autovacuum to be logged of milliseconds
-pgsql_log_checkpoints: 'on' # Logged checkpoints and restartpoints
-pgsql_log_connections: 'on' # Logged connection to the server
-pgsql_log_disconnections: 'on' # Logged diconnection to the server
-pgsql_log_line_prefix: "'%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '" # Output string at the beginning of each log
-pgsql_log_lock_waits: 'on' # Logged session waits longer than deadlock_timeout
-pgsql_log_min_duration_statement: '1000' # Logged statement ran for at least the specified number in milliseconds
-pgsql_log_statement: 'ddl' # Logged SQL statements
-pgsql_log_temp_files: '0' # Logged temporary file names and sizes
-pgsql_log_timezone: 'PRC' # Time zone used for timestamps written in the server log
-pgsql_max_wal_senders: '3' # The number of simultaneously running WAL sender processes
-pgsql_max_wal_size: '4GB' # Maximum size to let the WAL grow to between automatic WAL checkpoints
-pgsql_min_wal_size: '2GB' # Old WAL files are always recycled below this setting, rather than removed
-pgsql_random_page_cost: '4' # The cost of a non-sequentially-fetched disk page
-pgsql_synchronous_commit: 'off' # Transaction commit will wait for WAL records to be written to disk before the command returns a "success"
-pgsql_wal_buffers: '16MB' # The amount of shared memory used for WAL data that has not yet been written to disk
-pgsql_wal_level: 'logical' # Determines how much information is written to the WAL
+pgsql_path: '/data' # Specify the PostgreSQL data directory.
+pgsql_archive_mode: 'on' # Completed WAL segments are sent to archive storage when archive_mode is enabled.
+pgsql_checkpoint_completion_target: '0.9' # Specifies the target of checkpoint completion.
+pgsql_commit_delay: '10' # Time delay before a WAL flush is initiated in microseconds.
+pgsql_commit_siblings: '5' # Minimum number of concurrent open transactions to require before performing the commit_delay.
+pgsql_default_statistics_target: '100' # Default statistics target for table columns without a column-specific target set via ALTER TABLE SET STATISTICS.
+pgsql_effective_io_concurrency: '2' # Number of concurrent disk I/O operations that PostgreSQL expects can be executed simultaneously.
+pgsql_fsync: 'off' # Turning off often a performance benefit.
+pgsql_full_page_writes: 'on' # Writes the entire content of each disk page to WAL during the first modification of that page after a checkpoint.
+pgsql_hot_standby: 'on' # Specifies whether or not you can connect and run queries during recovery.
+pgsql_lc_messages: 'C' # The language of system messages.
+pgsql_listen_addresses: "'0.0.0.0'" # Specifies the TCP/IP address(es) on which the server is to listen.
+pgsql_log_autovacuum_min_duration: '0' # Executed by autovacuum to be logged of milliseconds.
+pgsql_log_checkpoints: 'on' # Logged checkpoints and restartpoints.
+pgsql_log_connections: 'on' # Logged connection to the server.
+pgsql_log_disconnections: 'on' # Logged diconnection to the server.
+pgsql_log_line_prefix: "'%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '" # Output string at the beginning of each log.
+pgsql_log_lock_waits: 'on' # Logged session waits longer than deadlock_timeout.
+pgsql_log_min_duration_statement: '1000' # Logged statement ran for at least the specified number in milliseconds.
+pgsql_log_statement: 'ddl' # Logged SQL statements.
+pgsql_log_temp_files: '0' # Logged temporary file names and sizes.
+pgsql_log_timezone: 'PRC' # Time zone used for timestamps written in the server log.
+pgsql_max_wal_senders: '3' # The number of simultaneously running WAL sender processes.
+pgsql_max_wal_size: '4GB' # Maximum size to let the WAL grow to between automatic WAL checkpoints.
+pgsql_min_wal_size: '2GB' # Old WAL files are always recycled below this setting, rather than removed.
+pgsql_random_page_cost: '4' # The cost of a non-sequentially-fetched disk page.
+pgsql_synchronous_commit: 'off' # Transaction commit will wait for WAL records to be written to disk before the command returns a "success".
+pgsql_wal_buffers: '16MB' # The amount of shared memory used for WAL data that has not yet been written to disk.
+pgsql_wal_level: 'logical' # Determines how much information is written to the WAL.

@@ -51,6 +51,10 @@
 - name: 'Install PostgreSQL prometheus exporter'
   include: 'postgres_exporter.yml'
 
+- name: Registered with HashiCorp Consul
+  include: 'register.yml'
+  when: consul_is_register
+
 - name: Ensure MTA service is enabled
   systemd:
     name: 'postfix.service'

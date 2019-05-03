@@ -42,6 +42,6 @@
 - name: 'Change default password'
   postgresql_user:
     user: 'postgres'
-    password: '{{ db_sa_pass|default(omit,true) }}'
+    password: '{{ pgsql_sa_pass|default(omit,true) }}'
   no_log: true
   listen: 'PostgreSQL Server System configuration'
