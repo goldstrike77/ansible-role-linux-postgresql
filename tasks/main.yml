@@ -46,7 +46,7 @@
 
 - name: 'Include specific tasks for {{ pgsql_releases }} release'
   include: '{{ pgsql_releases }}.yml'
-  when: result|changed
+  when: result is changed
 
 - name: 'Install PostgreSQL prometheus exporter'
   include: 'postgres_exporter.yml'

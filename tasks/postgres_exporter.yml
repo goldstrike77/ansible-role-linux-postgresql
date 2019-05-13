@@ -42,7 +42,7 @@
     state: 'started'
     daemon_reload: yes
   when:
-    - systemd_update.changed or conf_update.changed
+    - systemd_update is changed or conf_update is changed
 
 - name: Ensure PostgreSQL prometheus exporter firewall port is allow
   firewalld:
@@ -58,4 +58,4 @@
   service:
     name: firewalld
     state: reloaded
-  when: result.changed
+  when: result is changed
