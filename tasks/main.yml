@@ -53,7 +53,7 @@
 
 - name: Registered with HashiCorp Consul
   include: 'register.yml'
-  when: consul_is_register
+  when: consul_public_register
 
 - name: Ensure MTA service is enabled
   systemd:
