@@ -54,10 +54,10 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 
 ##### Service Mesh
 * `environments`: Define the service environment.
-* `consul_is_register`: Whether register a client service with consul.
-* `consul_exporter_token`: Consul client ACL token.
-* `consul_clients`: List of consul clients.
-* `consul_http_port`:The consul HTTP API port.
+* `consul_public_register`: Whether register a exporter service with public consul client.
+* `consul_public_exporter_token`: Public Consul client ACL token.
+* `consul_public_clients`: List of public consul clients.
+* `consul_public_http_port`: The consul HTTP API port.
 
 ##### Listen port
 * `pgsql_port`: PostgreSQL instance communication ports.
@@ -126,11 +126,6 @@ You can also use the group_vars or the host_vars files for setting the variables
     pgsql_releases: 'PostgreSQL'
     pgsql_sa_pass: 'password'
     pgsql_mailto: 'somebody@example.com'
-    environments: 'SIT'
-    consul_is_register: false
-    consul_exporter_token: '00000000-0000-0000-0000-000000000000'
-    consul_clients: 'localhost'
-    consul_http_port: '8500'
     pgsql_port: '5432'
     pgsql_exporter_port: '9187'
     pgsql_path: '/data'
@@ -162,6 +157,11 @@ You can also use the group_vars or the host_vars files for setting the variables
     pgsql_synchronous_commit: 'off'
     pgsql_wal_buffers: '16MB'
     pgsql_wal_level: 'logical'
+    environments: 'SIT'
+    consul_public_register: false
+    consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
+    consul_public_clients: 'localhost'
+    consul_public_http_port: '8500'
 
 ## License
 ![](https://img.shields.io/badge/MIT-purple.svg?style=for-the-badge)
