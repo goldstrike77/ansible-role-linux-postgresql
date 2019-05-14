@@ -45,7 +45,6 @@ The following list of supported the PostgreSQL releases:
 There are some variables in defaults/main.yml which can (Or needs to) be overridden:
 
 ##### General parameters
-* `pgsql_is_install`: A boolean value, whether install the PostgreSQL.
 * `pgsql_version`:  Specify the PostgreSQL version.
 * `pgsql_releases`: pgsql for PostgreSQL / pgpro for PostgresPro
 * `pgsql_sa_pass`: PostgreSQL root account password
