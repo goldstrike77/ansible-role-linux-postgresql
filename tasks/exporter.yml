@@ -5,12 +5,15 @@
     description: '{{ pgsql_exporter_repo_name }} YUM repository'
     file: '{{ pgsql_exporter_repo_name }}'
     baseurl: '{{ pgsql_exporter_repo_url }}'
-    gpgcheck: no
+    gpgcheck: 'no'
+    timeout: '60'
 
 - name: Install the PostgreSQL prometheus exporter
   yum:
     name: '{{ item }}'
     state: 'present'
+    validate_certs: 'no'
+    disable_gpg_check: 'yes'
   with_items:
     - '{{ pgsql_exporter_packages }}'
 

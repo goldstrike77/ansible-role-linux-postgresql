@@ -7,11 +7,14 @@
         description: '{{ pgsql_repo_name }} YUM repository'
         file: '{{ pgsql_repo_name }}'
         baseurl: '{{ pgsql_repo_url }}'
-        gpgcheck: no
+        gpgcheck: 'no'
+        timeout: '60'
     - name: Install the {{ pgsql_releases }} packages
       yum:
         name: '{{ ",".join(vars["pgsql_packages_" + pgsql_version]) }}'
         state: 'present'
+        validate_certs: 'no'
+        disable_gpg_check: 'yes'
   when: pgsql_releases == 'PostgreSQL'
 
 - name: '{{ pgsql_releases }} installation'
@@ -22,11 +25,14 @@
         description: '{{ pgpro_repo_name }} YUM repository'
         file: '{{ pgpro_repo_name }}'
         baseurl: '{{ pgpro_repo_url }}'
-        gpgcheck: no
+        gpgcheck: 'no'
+        timeout: '60'
     - name: Install the {{ pgsql_releases }} packages
       yum:
         name: '{{ ",".join(vars["pgpro_packages_" + pgsql_version]) }}'
         state: 'present'
+        validate_certs: 'no'
+        disable_gpg_check: 'yes'
   when: pgsql_releases == 'PostgresPro'
 
 - name: 'Ensure {{ pgsql_releases }} firewall port is allow'

@@ -49,7 +49,7 @@
   when: result is changed
 
 - name: 'Install PostgreSQL prometheus exporter'
-  include: 'postgres_exporter.yml'
+  include: 'exporter.yml'
 
 - name: Registered with HashiCorp Consul
   include: 'register.yml'
