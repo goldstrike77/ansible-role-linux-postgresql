@@ -5,6 +5,7 @@ pgsql_version: '96' # Specify the PostgreSQL version.
 pgsql_releases: 'PostgreSQL' # pgsql for PostgreSQL / pgpro for PostgresPro
 pgsql_sa_pass: 'password' # PostgreSQL root account password
 pgsql_mailto: 'somebody@example.com' # PostgreSQL report mail recipient
+pgsql_system_type: 'autopilot' # Define instance parameters.
 
 # Service Mesh #
 environments: 'SIT' # Define the service environment.
@@ -18,8 +19,12 @@ pgsql_port: '5432' # PostgreSQL instance communication ports.
 pgsql_exporter_port: '9187' # Prometheus exporter communication ports.
 
 # Server System Variables #
-pgsql_path: '/data' # Specify the PostgreSQL data directory.
+pgsql_effective_cache_size: '{% if pgsql_system_type == "small" %}768{% else %}{{ (ansible_memtotal_mb * 0.60)|int }}{% endif %}' # The effective size of the disk cache in MB.
+pgsql_maintenance_work_mem: '{% if pgsql_system_type == "small" %}64{% else %}{{ (ansible_memtotal_mb * 0.0625)|int }}{% endif %}' # Specifies the maximum amount of memory to be used by maintenance operations in MB.
+pgsql_shared_buffers: '{% if pgsql_system_type == "small" %}256{% else %}{{ (ansible_memtotal_mb * 0.40)|int }}{% endif %}' # Amount of memory the database server uses for shared memory buffers in MB.
+pgsql_work_mem: '{% if pgsql_system_type == "small" %}1024{% else %}{{ (ansible_memtotal_mb * 0.0004 * 1024 )|int }}{% endif %}' # Amount of memory to be used by internal sort operations in kb.
 pgsql_archive_mode: 'on' # Completed WAL segments are sent to archive storage when archive_mode is enabled.
+pgsql_character_set: 'utf8' # Server's default character set.
 pgsql_checkpoint_completion_target: '0.9' # Specifies the target of checkpoint completion.
 pgsql_commit_delay: '10' # Time delay before a WAL flush is initiated in microseconds.
 pgsql_commit_siblings: '5' # Minimum number of concurrent open transactions to require before performing the commit_delay.
@@ -43,7 +48,15 @@ pgsql_log_timezone: 'PRC' # Time zone used for timestamps written in the server 
 pgsql_max_wal_senders: '3' # The number of simultaneously running WAL sender processes.
 pgsql_max_wal_size: '4GB' # Maximum size to let the WAL grow to between automatic WAL checkpoints.
 pgsql_min_wal_size: '2GB' # Old WAL files are always recycled below this setting, rather than removed.
+pgsql_path: '/data' # Specify the PostgreSQL data directory.
 pgsql_random_page_cost: '4' # The cost of a non-sequentially-fetched disk page.
 pgsql_synchronous_commit: 'off' # Transaction commit will wait for WAL records to be written to disk before the command returns a "success".
 pgsql_wal_buffers: '16MB' # The amount of shared memory used for WAL data that has not yet been written to disk.
 pgsql_wal_level: 'logical' # Determines how much information is written to the WAL.
+
+# Business Database Variables #
+#pgsql_bu_dbs_arg: # example only
+#  - dbs: 'd_example'
+#    user: 'u_example'
+#    pass: 'password'
+#    priv: 'ALL'

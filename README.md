@@ -32,7 +32,7 @@ This Ansible role installs PostgreSQL on linux operating system, including estab
 ### Operating systems
 This role will work on the following operating systems:
 
-  * CentOS 6/7
+  * CentOS 7
 
 ### PostgreSQL versions
 

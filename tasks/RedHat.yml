@@ -1,4 +1,7 @@
 ---
+- name: Include OS-specific variables
+  include_vars: '{{ ansible_os_family }}.yml'
+
 - name: '{{ pgsql_releases }} installation'
   block:
     - name: 'Add {{ pgsql_releases }} YUM repositories'
@@ -37,17 +40,10 @@
 
 - name: 'Ensure {{ pgsql_releases }} firewall port is allow'
   firewalld:
-    port: '{{ pgsql_port }}/tcp'
+    port: '{{ item }}/tcp'
+    zone: 'public'
     permanent: 'true'
+    immediate: 'true'
     state: 'enabled'
   when:
-    - ansible_distribution_major_version|int > 6
-  register: result
-
-- name: Reload firewalld service
-  service:
-    name: firewalld
-    state: reloaded
-  when:
-    - result is changed
     - ansible_distribution_major_version|int > 6

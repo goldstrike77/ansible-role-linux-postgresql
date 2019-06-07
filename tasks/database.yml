@@ -1,0 +1,26 @@
+---
+- name: Create business database
+  postgresql_db:
+    login_host: '127.0.0.1'
+    login_user: 'postgres'
+    login_password: '{{ pgsql_sa_pass }}'
+    login_port: '{{ pgsql_port }}'
+    name: '{{ item.dbs }}'
+    encoding: '{{ pgsql_character_set }}'
+    state: 'present'
+  loop: '{{ pgsql_bu_dbs_arg }}'
+  no_log: true
+
+- name: Create business user with privileges
+  postgresql_user:
+    login_host: '127.0.0.1'
+    login_user: 'postgres'
+    login_password: '{{ pgsql_sa_pass }}'
+    login_port: '{{ pgsql_port }}'
+    db: '{{ item.dbs }}'
+    name: '{{ item.user }}'
+    password: '{{ item.pass }}'
+    priv: '{{ item.priv }}'
+    state: present
+  loop: '{{ pgsql_bu_dbs_arg }}'
+  no_log: true

@@ -1,7 +1,4 @@
 ---
-- name: Include OS-specific variables
-  include_vars: '{{ ansible_os_family }}.yml'
-
 - name: Include tasks for specific OS
   include: '{{ ansible_os_family }}.yml'
 
@@ -39,7 +36,7 @@
   register: result
 
 - name: 'Initializes the PostgreSQL system tables'
-  shell: /bin/su - {{ pgsql_user }} -c "initdb -D {{ pgsql_path }}/pgsql"
+  shell: /bin/su - {{ pgsql_user }} -c "initdb -D {{ pgsql_path }}/pgsql -E {{ pgsql_character_set }}"
   when: 
     - not result.results[0].stat.exists
   register: result
@@ -50,6 +47,10 @@
 
 - name: 'Install PostgreSQL prometheus exporter'
   include: 'exporter.yml'
+
+- name: Include business database tasks
+  include: 'database.yml'
+  when: pgsql_bu_dbs_arg is defined
 
 - name: Registered with HashiCorp Consul
   include: 'register.yml'
