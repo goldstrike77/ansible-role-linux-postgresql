@@ -40,7 +40,7 @@
 
 - name: 'Ensure {{ pgsql_releases }} firewall port is allow'
   firewalld:
-    port: '{{ item }}/tcp'
+    port: '{{ pgsql_port }}/tcp'
     zone: 'public'
     permanent: 'true'
     immediate: 'true'
