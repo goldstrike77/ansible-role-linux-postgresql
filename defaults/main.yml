@@ -60,3 +60,4 @@ pgsql_wal_level: 'logical' # Determines how much information is written to the W
 #    user: 'u_example'
 #    pass: 'password'
 #    priv: 'ALL'
+#    role: 'SUPERUSER'

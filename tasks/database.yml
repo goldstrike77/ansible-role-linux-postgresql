@@ -21,6 +21,7 @@
     name: '{{ item.user }}'
     password: '{{ item.pass }}'
     priv: '{{ item.priv }}'
+    role_attr_flags: '{{ item.role }}'
     state: present
   loop: '{{ pgsql_bu_dbs_arg }}'
   no_log: true
