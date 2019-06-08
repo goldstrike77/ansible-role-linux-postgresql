@@ -8,7 +8,7 @@
     state: directory
     owner: '{{ pgsql_user }}'
     group: '{{ pgsql_group }}'
-    mode: 0755
+    mode: 0700
   with_items:
     - '{{ pgsql_folder }}'
 
