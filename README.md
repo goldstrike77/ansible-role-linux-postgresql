@@ -57,6 +57,10 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `consul_public_clients`: List of public consul clients.
 * `consul_public_http_port`: The consul HTTP API port.
 
+##### Backup parameters
+* `pgsql_backupset_arg.keep`: The number of full backups (and its incrementals) to keep.
+* `pgsql_backupset_arg.encryptkey`: BackupSet encryption key.
+
 ##### Listen port
 * `pgsql_port`: PostgreSQL instance communication ports.
 * `pgsql_exporter_port`: Prometheus exporter communication ports.
@@ -124,6 +128,9 @@ You can also use the group_vars or the host_vars files for setting the variables
     pgsql_releases: 'PostgreSQL'
     pgsql_sa_pass: 'password'
     pgsql_mailto: 'somebody@example.com'
+    pgsql_backupset_arg:
+      keep: '2'
+      encryptkey: 'kDLQzpZKqtl58SM5lTIj5AG3n8878Aie'
     pgsql_port: '5432'
     pgsql_exporter_port: '9187'
     pgsql_path: '/data'

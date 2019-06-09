@@ -14,6 +14,11 @@ consul_public_exporter_token: '00000000-0000-0000-0000-000000000000' # Public Co
 consul_public_clients: 'localhost' # List of public consul clients.
 consul_public_http_port: '8500' # The consul HTTP API port.
 
+# Backup parameters #
+pgsql_backupset_arg:
+  keep: '2' # The number of full backups (and its incrementals) to keep.
+  encryptkey: 'kDLQzpZKqtl58SM5lTIj5AG3n8878Aie' # BackupSet encryption key, Generate by [openssl rand -base64 24].
+
 # Listen port #
 pgsql_port: '5432' # PostgreSQL instance communication ports.
 pgsql_exporter_port: '9187' # Prometheus exporter communication ports.
