@@ -5,23 +5,21 @@
 - name: 'Creating PostgreSQL folder'
   file:
     dest: '{{ item }}'
-    state: directory
+    state: 'directory'
     owner: '{{ pgsql_user }}'
     group: '{{ pgsql_group }}'
-    mode: 0700
-  with_items:
-    - '{{ pgsql_folder }}'
+    mode: '0700'
+  loop: '{{ pgsql_folder }}'
 
 - name: 'Configure PostgreSQL kernel parameters'
   sysctl:
     name: '{{ item.variable }}'
     value: '{{ item.value }}'
-    state: present
-    reload: yes
-    sysctl_set: yes
-    sysctl_file: /etc/sysctl.d/20-sysctl.conf
-  with_items:
-    - '{{ pgsql_kernel_parameters }}'
+    state: 'present'
+    reload: 'yes'
+    sysctl_set: 'yes'
+    sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
+  loop: '{{ pgsql_kernel_parameters }}'
 
 - name: 'Set PostgreSQL system-wide PATH parameters'
   lineinfile: 
@@ -30,15 +28,13 @@
 
 - name: 'Check if PostgreSQL tablespace exists'
   stat:
-    path: '{{ item }}'
-  with_items:
-    - '{{ pgsql_path }}/pgsql/PG_VERSION'
+    path: '{{ pgsql_path }}/pgsql/PG_VERSION'
   register: result
 
 - name: 'Initializes the PostgreSQL system tables'
   shell: /bin/su - {{ pgsql_user }} -c "initdb -D {{ pgsql_path }}/pgsql -E {{ pgsql_character_set }}"
   when: 
-    - not result.results[0].stat.exists
+    - not result.stat.exists
   register: result
 
 - name: 'Include specific tasks for {{ pgsql_releases }} release'
@@ -47,6 +43,7 @@
 
 - name: 'Install PostgreSQL prometheus exporter'
   include: 'exporter.yml'
+  when: exporter_is_install | bool
 
 - name: Include business database tasks
   include: 'database.yml'
@@ -54,7 +51,9 @@
 
 - name: Registered with HashiCorp Consul
   include: 'register.yml'
-  when: consul_public_register
+  when:
+    - exporter_is_install | bool
+    - consul_public_register | bool
 
 - name: Ensure MTA service is enabled
   systemd:

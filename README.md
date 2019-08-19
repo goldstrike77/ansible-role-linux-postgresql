@@ -52,6 +52,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 
 ##### Service Mesh
 * `environments`: Define the service environment.
+* `exporter_is_install`: Whether to install prometheus exporter.
 * `consul_public_register`: Whether register a exporter service with public consul client.
 * `consul_public_exporter_token`: Public Consul client ACL token.
 * `consul_public_clients`: List of public consul clients.
@@ -110,8 +111,6 @@ There are no dependencies on other roles.
 See tests/inventory for an example.
 
     node01 ansible_host='192.168.1.10' pgsql_version='96' pgsql_releases='PostgreSQL'
-    node02 ansible_host='192.168.1.11' pgsql_version='96' pgsql_releases='PostgreSQL'
-    node03 ansible_host='192.168.1.12' pgsql_version='96' pgsql_releases='PostgreSQL'
 
 ### Vars in role configuration
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
@@ -163,6 +162,7 @@ You can also use the group_vars or the host_vars files for setting the variables
     pgsql_wal_buffers: '16MB'
     pgsql_wal_level: 'logical'
     environments: 'SIT'
+    exporter_is_install: false
     consul_public_register: false
     consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
     consul_public_clients: 'localhost'

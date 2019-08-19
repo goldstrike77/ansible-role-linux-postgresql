@@ -18,6 +18,10 @@
         state: 'present'
         validate_certs: 'no'
         disable_gpg_check: 'yes'
+      register: yum_status
+      until: yum_status is succeeded
+      retries: 3
+      delay: 5
   when: pgsql_releases == 'PostgreSQL'
 
 - name: '{{ pgsql_releases }} installation'
@@ -36,6 +40,10 @@
         state: 'present'
         validate_certs: 'no'
         disable_gpg_check: 'yes'
+      register: yum_status
+      until: yum_status is succeeded
+      retries: 3
+      delay: 5
   when: pgsql_releases == 'PostgresPro'
 
 - name: 'Ensure {{ pgsql_releases }} firewall port is allow'

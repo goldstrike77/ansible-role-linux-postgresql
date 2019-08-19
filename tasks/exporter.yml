@@ -10,16 +10,18 @@
 
 - name: Install the PostgreSQL prometheus exporter
   yum:
-    name: '{{ item }}'
+    name: '{{ pgsql_exporter_packages }}'
     state: 'present'
     validate_certs: 'no'
     disable_gpg_check: 'yes'
-  with_items:
-    - '{{ pgsql_exporter_packages }}'
+  register: yum_status
+  until: yum_status is succeeded
+  retries: 3
+  delay: 5
 
 - name: 'Add PostgreSQL prometheus exporter data source'
   lineinfile:
-    state: present
+    state: 'present'
     dest: '/usr/lib/systemd/system/postgres_exporter.service'
     insertafter: '^\[Service\]'
     regexp: '^Environment='
@@ -33,7 +35,7 @@
     dest: '{{ item.dest }}'
     owner: 'root'
     group: 'root'
-    mode: 0644
+    mode: '0644'
   with_items:
     - { src: 'postgres_exporter', dest: '/etc/default/' }    
   register: conf_update
@@ -43,7 +45,7 @@
     name: 'postgres_exporter.service'
     enabled: 'yes'
     state: 'started'
-    daemon_reload: yes
+    daemon_reload: 'yes'
   when:
     - systemd_update is changed or conf_update is changed
 
@@ -59,6 +61,6 @@
 
 - name: Reload firewalld service
   service:
-    name: firewalld
-    state: reloaded
+    name: 'firewalld'
+    state: 'reloaded'
   when: result is changed
