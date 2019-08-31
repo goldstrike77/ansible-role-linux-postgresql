@@ -4,11 +4,11 @@
 
 - name: 'Creating PostgreSQL folder'
   file:
-    dest: '{{ item }}'
+    dest: '{{ item.path }}'
     state: 'directory'
     owner: '{{ pgsql_user }}'
     group: '{{ pgsql_group }}'
-    mode: '0700'
+    mode: '{{ item.mode }}'
   loop: '{{ pgsql_folder }}'
 
 - name: 'Configure PostgreSQL kernel parameters'
