@@ -3,7 +3,7 @@
 pgsql_is_install: false # A boolean value, whether install the PostgreSQL.
 pgsql_version: '96' # Specify the PostgreSQL version.
 pgsql_releases: 'PostgreSQL' # pgsql for PostgreSQL / pgpro for PostgresPro
-pgsql_sa_pass: 'password' # PostgreSQL root account password
+pgsql_sa_pass: 'changeme' # PostgreSQL root account password
 pgsql_mailto: 'somebody@example.com' # PostgreSQL report mail recipient
 pgsql_system_type: 'autopilot' # Define instance parameters.
 
@@ -73,3 +73,4 @@ pgsql_wal_level: 'logical' # Determines how much information is written to the W
 #    pass: 'password'
 #    priv: 'ALL'
 #    role: 'SUPERUSER'
+#    net: '10.101.4.32/28'

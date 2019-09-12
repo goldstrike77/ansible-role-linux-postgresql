@@ -25,3 +25,26 @@
     state: present
   loop: '{{ pgsql_bu_dbs_arg }}'
   no_log: true
+
+- name: Grant user hosts are allowed to connect
+  postgresql_pg_hba:
+    dest: '{{ pgsql_path }}/pgsql/pg_hba.conf'
+    contype: 'host'
+    users: '{{ item.user }}'
+    source: '{{ item.net }}'
+    databases: '{{ item.dbs }}'
+    method: 'md5'
+    backup: 'yes'
+  loop: '{{ pgsql_bu_dbs_arg }}'
+  register: pgsql_hba_update
+  when: item.net != '127.0.0.1'
+
+- name: Reload config settings
+  postgresql_query:
+    login_host: '127.0.0.1'
+    port: '{{ pgsql_port }}'
+    db: 'postgres'
+    login_user: 'postgres'
+    login_password: '{{ pgsql_sa_pass }}'
+    query: 'SELECT pg_reload_conf()'
+  when: pgsql_hba_update is changed
