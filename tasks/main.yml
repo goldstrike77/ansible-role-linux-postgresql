@@ -2,6 +2,12 @@
 - name: Include tasks for specific OS
   include: '{{ ansible_os_family }}.yml'
 
+- name: Include firewall tasks
+  include: 'firewall.yml'
+
+- name: Straight to getenforce selinux status
+  include: 'selinux.yml'
+
 - name: 'Creating PostgreSQL folder'
   file:
     dest: '{{ item.path }}'

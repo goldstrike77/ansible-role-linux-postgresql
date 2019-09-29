@@ -45,18 +45,3 @@
       retries: 3
       delay: 5
   when: pgsql_releases == 'PostgresPro'
-
-- name: Gathering service facts
-  service_facts:
-  register: services_state
-
-- name: 'Ensure {{ pgsql_releases }} firewall port is allow'
-  firewalld:
-    port: '{{ pgsql_port }}/tcp'
-    zone: 'public'
-    permanent: 'true'
-    immediate: 'true'
-    state: 'enabled'
-  when:
-    - ansible_distribution_major_version|int > 6
-    - services_state.ansible_facts.services["firewalld.service"].state == 'running'
