@@ -50,15 +50,6 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `pgsql_sa_pass`: PostgreSQL root account password
 * `pgsql_mailto`: PostgreSQL report mail recipient
 
-##### Service Mesh
-* `environments`: Define the service environment.
-* `tags`: Define the service custom label.
-* `exporter_is_install`: Whether to install prometheus exporter.
-* `consul_public_register`: false Whether register a exporter service with public consul client.
-* `consul_public_exporter_token`: Public Consul client ACL token.
-* `consul_public_clients`: List of public consul clients.
-* `consul_public_http_port`: The consul HTTP API port.
-
 ##### Backup parameters
 * `pgsql_backupset_arg.keep`: The number of full backups (and its incrementals) to keep.
 * `pgsql_backupset_arg.encryptkey`: BackupSet encryption key.
@@ -97,6 +88,16 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `pgsql_synchronous_commit`: Transaction commit will wait for WAL records to be written to disk before the command returns a "success".
 * `pgsql_wal_buffers`: The amount of shared memory used for WAL data that has not yet been written to disk.
 * `pgsql_wal_level`: Determines how much information is written to the WAL.
+
+##### Service Mesh
+* `environments`: Define the service environment.
+* `tags`: Define the service custom label.
+* `exporter_is_install`: Whether to install prometheus exporter.
+* `consul_public_register`: false Whether register a exporter service with public consul client.
+* `consul_public_exporter_token`: Public Consul client ACL token.
+* `consul_public_http_prot`: The consul Hypertext Transfer Protocol.
+* `consul_public_clients`: List of public consul clients.
+* `consul_public_http_port`: The consul HTTP API port.
 
 ### Other parameters
 There are some variables in vars/main.yml:
@@ -162,7 +163,7 @@ You can also use the group_vars or the host_vars files for setting the variables
     pgsql_synchronous_commit: 'off'
     pgsql_wal_buffers: '16MB'
     pgsql_wal_level: 'logical'
-    environments: 'SIT'
+    environments: 'Development'
     tags:
       subscription: 'default'
       owner: 'nobody'
@@ -172,8 +173,10 @@ You can also use the group_vars or the host_vars files for setting the variables
     exporter_is_install: false
     consul_public_register: false
     consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
-    consul_public_clients: 'localhost'
+    consul_public_http_prot: 'https'
     consul_public_http_port: '8500'
+    consul_public_clients:
+      - '127.0.0.1'
 
 ## License
 ![](https://img.shields.io/badge/MIT-purple.svg?style=for-the-badge)
