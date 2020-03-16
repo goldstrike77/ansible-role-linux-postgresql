@@ -1,0 +1,7 @@
+[pgsql]
+type = {{ pgsql_backupset_arg.cloud_drive }}
+{% if pgsql_backupset_arg.cloud_drive == 'azureblob' %}
+account = {{ pgsql_backupset_arg.cloud_config.account }}
+key = {{ pgsql_backupset_arg.cloud_config.key }}
+endpoint = {{ pgsql_backupset_arg.cloud_config.endpoint }}
+{% endif %}

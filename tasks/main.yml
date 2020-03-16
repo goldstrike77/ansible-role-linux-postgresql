@@ -8,6 +8,28 @@
 - name: Straight to getenforce selinux status
   include: 'selinux.yml'
 
+- name: Creating Rclone configureation folder.
+  file:
+    dest: '/etc/rclone'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+  when:
+    - pgsql_backupset_arg.cloud_rsync | bool
+    - pgsql_backupset_arg.cloud_drive is defined
+
+- name: Rclone configuration file transfer.
+  template:
+    src: 'rclone.conf.j2'
+    dest: '/etc/rclone/pgsql.conf'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  when:
+    - pgsql_backupset_arg.cloud_rsync | bool
+    - pgsql_backupset_arg.cloud_drive is defined
+
 - name: 'Creating PostgreSQL folder'
   file:
     dest: '{{ item.path }}'

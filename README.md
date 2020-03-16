@@ -53,6 +53,11 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### Backup parameters
 * `pgsql_backupset_arg.keep`: The number of full backups (and its incrementals) to keep.
 * `pgsql_backupset_arg.encryptkey`: BackupSet encryption key.
+* `pgsql_backupset_arg.cloud_rsync`: Whether rsync for cloud storage.
+* `pgsql_backupset_arg.cloud_drive`: Specify the cloud storage providers.
+* `pgsql_backupset_arg.cloud_bwlimit`: Controls the bandwidth limit.
+* `pgsql_backupset_arg.cloud_event`: Define transfer events.
+* `pgsql_backupset_arg.cloud_config`: Specify the cloud storage configuration.
 
 ##### Listen port
 * `pgsql_port`: PostgreSQL instance communication ports.
@@ -132,6 +137,14 @@ You can also use the group_vars or the host_vars files for setting the variables
     pgsql_backupset_arg:
       keep: '2'
       encryptkey: 'kDLQzpZKqtl58SM5lTIj5AG3n8878Aie'
+      cloud_rsync: true
+      cloud_drive: 'azureblob'
+      cloud_bwlimit: '10M'
+      cloud_event: 'sync'
+      cloud_config:
+        account: 'blobuser'
+        key: 'base64encodedkey=='
+        endpoint: 'blob.core.chinacloudapi.cn'
     pgsql_port: '5432'
     pgsql_exporter_port: '9187'
     pgsql_path: '/data'

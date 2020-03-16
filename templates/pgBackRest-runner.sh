@@ -5,6 +5,7 @@ CAT=/bin/cat
 FORMAIL=/bin/formail
 SENDMAIL=/sbin/sendmail
 BACKUPEX=/bin/pgbackrest
+RCLONE=/bin/rclone
 TMPFILE="/tmp/pgBackRest.$$.log"
 MAILTO={{ pgsql_mailto }}
 
@@ -23,6 +24,11 @@ else
   $CAT $TMPFILE | $FORMAIL -I "From: do-not-reply@somebody.com" -I "Subject:"`hostname`" PostgreSQL backup succeed on "`date '+%Y%m%d'` | $SENDMAIL -oi $MAILTO
 fi
 
+{% if pgsql_backupset_arg.cloud_rsync | bool and pgsql_backupset_arg.cloud_drive is defined %}
+# Rsync for cloud storage
+$RCLONE --verbose --config="/etc/rclone/pgsql.conf" mkdir pgsql:{{ ansible_hostname | lower }}
+$RCLONE --bwlimit="{{ pgsql_backupset_arg.cloud_bwlimit | default('10M') }}" --verbose --config="/etc/rclone/pgsql.conf" {{ consul_backupset_arg.cloud_event | default('sync') }} {{ pgsql_path }}/backup/pgsql/backup pgsql:{{ ansible_hostname | lower }}/pgsql
+{% endif %}
 # Cleanup
 #rm -f $TMPFILE
 exit 0
