@@ -110,7 +110,7 @@ There are some variables in vars/main.yml:
 * `pgsql_kernel_parameters`: Operating system variables.
 
 ## Dependencies
-- Ansible versions >= 2.8 are supported.
+- Ansible versions >= 2.8
 - Python >= 2.7.5
 
 ## Example
