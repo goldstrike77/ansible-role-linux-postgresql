@@ -23,9 +23,9 @@
   template:
     src: 'rclone.conf.j2'
     dest: '/etc/rclone/pgsql.conf'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
+    owner: 'postgres'
+    group: 'postgres'
+    mode: '0640'
   when:
     - pgsql_backupset_arg.cloud_rsync | bool
     - pgsql_backupset_arg.cloud_drive is defined
