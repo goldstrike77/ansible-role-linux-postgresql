@@ -3,7 +3,7 @@
   service_facts:
   register: services_state
 
-- name: Allow MongoDB service port
+- name: Allow PostgreSQL service port
   firewalld:
     port: '{{ item }}/tcp'
     zone: 'public'
@@ -13,4 +13,6 @@
   loop:
    - '{{ pgsql_port }}'
    - '{{ pgsql_exporter_port }}'
-  when: services_state.ansible_facts.services["firewalld.service"].state == 'running'
+  when:
+    - services_state.ansible_facts.services["firewalld.service"] is defined
+    - services_state.ansible_facts.services["firewalld.service"].state == 'running'

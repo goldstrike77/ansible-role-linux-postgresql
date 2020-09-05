@@ -4,6 +4,7 @@ pgsql_group: 'postgres'
 
 pgsql_folder:
   - { path: '{{ pgsql_path }}/pgsql', mode: '0700' }
+  - { path: '{{ pgsql_path }}/backup', owner: 'root', mode: '0755' }
   - { path: '{{ pgsql_path }}/backup/pgsql', mode: '0755' }
 
 pgsql_service_parameter:

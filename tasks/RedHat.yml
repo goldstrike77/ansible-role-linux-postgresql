@@ -23,15 +23,15 @@
     update_cache: 'yes'
   register: yum_status
   until: yum_status is succeeded
-  retries: 3
-  delay: 5
+  retries: 5
+  delay: 2
   when:
     - pgsql_backupset_arg.cloud_rsync | bool
     - pgsql_backupset_arg.cloud_drive is defined
 
-- name: '{{ pgsql_releases }} installation'
+- name: PostgreSQL install operation
   block:
-    - name: 'Add {{ pgsql_releases }} YUM repositories'
+    - name: 'Add PostgreSQL YUM repositories'
       yum_repository:
         name: '{{ pgsql_repo_name }}'
         description: '{{ pgsql_repo_name }} YUM repository'
@@ -39,7 +39,15 @@
         baseurl: '{{ pgsql_repo_url }}'
         gpgcheck: 'no'
         timeout: '60'
-    - name: Install the {{ pgsql_releases }} packages
+    - name: 'Add PostgreSQL common YUM repositories'
+      yum_repository:
+        name: '{{ pgsql_comm_repo_name }}'
+        description: '{{ pgsql_comm_repo_name }} YUM repository'
+        file: '{{ pgsql_comm_repo_name }}'
+        baseurl: '{{ pgsql_comm_repo_url }}'
+        gpgcheck: 'no'
+        timeout: '60'
+    - name: Install the PostgreSQL packages
       yum:
         name: '{{ ",".join(vars["pgsql_packages_" + pgsql_version]) }}'
         state: 'present'
@@ -47,13 +55,13 @@
         disable_gpg_check: 'yes'
       register: yum_status
       until: yum_status is succeeded
-      retries: 3
-      delay: 5
+      retries: 5
+      delay: 2
   when: pgsql_releases == 'PostgreSQL'
 
-- name: '{{ pgsql_releases }} installation'
+- name: PostgresPro install operation
   block:
-    - name: 'Add {{ pgsql_releases }} YUM repositories'
+    - name: 'Add PostgresPro YUM repositories'
       yum_repository:
         name: '{{ pgpro_repo_name }}'
         description: '{{ pgpro_repo_name }} YUM repository'
@@ -61,7 +69,7 @@
         baseurl: '{{ pgpro_repo_url }}'
         gpgcheck: 'no'
         timeout: '60'
-    - name: Install the {{ pgsql_releases }} packages
+    - name: Install the PostgresPro packages
       yum:
         name: '{{ ",".join(vars["pgpro_packages_" + pgsql_version]) }}'
         state: 'present'
@@ -69,6 +77,6 @@
         disable_gpg_check: 'yes'
       register: yum_status
       until: yum_status is succeeded
-      retries: 3
-      delay: 5
+      retries: 5
+      delay: 2
   when: pgsql_releases == 'PostgresPro'

@@ -26,11 +26,11 @@ __Table of Contents__
 - [Contributors](#Contributors)
 
 ## Overview
-This Ansible role installs PostgreSQL on linux operating system, including establishing a filesystem structure and server configuration with some common operational features.
+PostgreSQL is a free and open-source relational database management system emphasizing extensibility and SQL compliance.
 
 ## Requirements
 ### Operating systems
-This role will work on the following operating systems:
+This Ansible role installs PostgreSQL on the Linux operating system, including establishing a filesystem structure and server configuration with some common operational features, Will works on the following operating systems:
 
   * CentOS 7
 
@@ -96,9 +96,11 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 
 ##### Service Mesh
 * `environments`: Define the service environment.
+* `datacenter`: Define the DataCenter.
+* `domain`: Define the Domain.
 * `tags`: Define the service custom label.
 * `exporter_is_install`: Whether to install prometheus exporter.
-* `consul_public_register`: false Whether register a exporter service with public consul client.
+* `consul_public_register`: Whether register a exporter service with public consul client.
 * `consul_public_exporter_token`: Public Consul client ACL token.
 * `consul_public_http_prot`: The consul Hypertext Transfer Protocol.
 * `consul_public_clients`: List of public consul clients.
@@ -123,74 +125,80 @@ See tests/inventory for an example.
 ### Vars in role configuration
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: all
-      roles:
-         - role: ansible-role-linux-PostgreSQL
-           pgsql_version: '96'
+```yaml
+- hosts: all
+  roles:
+     - role: ansible-role-linux-postgresql
+       pgsql_version: '96'
+```
 
 ### Combination of group vars and playbook
-You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`
+You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
-    pgsql_version: '96'
-    pgsql_releases: 'PostgreSQL'
-    pgsql_sa_pass: 'password'
-    pgsql_mailto: 'somebody@example.com'
-    pgsql_backupset_arg:
-      keep: '2'
-      encryptkey: 'kDLQzpZKqtl58SM5lTIj5AG3n8878Aie'
-      cloud_rsync: true
-      cloud_drive: 'azureblob'
-      cloud_bwlimit: '10M'
-      cloud_event: 'sync'
-      cloud_config:
-        account: 'blobuser'
-        key: 'base64encodedkey=='
-        endpoint: 'blob.core.chinacloudapi.cn'
-    pgsql_port: '5432'
-    pgsql_exporter_port: '9187'
-    pgsql_path: '/data'
-    pgsql_archive_mode: 'on'
-    pgsql_checkpoint_completion_target: '0.9'
-    pgsql_commit_delay: '10'
-    pgsql_commit_siblings: '5'
-    pgsql_default_statistics_target: '100'
-    pgsql_effective_io_concurrency: '2'
-    pgsql_fsync: 'off'
-    pgsql_full_page_writes: 'on'
-    pgsql_hot_standby: 'on'
-    pgsql_lc_messages: 'C'
-    pgsql_listen_addresses: "'0.0.0.0'"
-    pgsql_log_autovacuum_min_duration: '0'
-    pgsql_log_checkpoints: 'on'
-    pgsql_log_connections: 'on'
-    pgsql_log_disconnections: 'on'
-    pgsql_log_line_prefix: "'%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '"
-    pgsql_log_lock_waits: 'on'
-    pgsql_log_min_duration_statement: '1000'
-    pgsql_log_statement: 'ddl'
-    pgsql_log_temp_files: '0'
-    pgsql_log_timezone: 'PRC'
-    pgsql_max_wal_senders: '3'
-    pgsql_max_wal_size: '4GB'
-    pgsql_min_wal_size: '2GB'
-    pgsql_random_page_cost: '4'
-    pgsql_synchronous_commit: 'off'
-    pgsql_wal_buffers: '16MB'
-    pgsql_wal_level: 'logical'
-    environments: 'Development'
-    tags:
-      subscription: 'default'
-      owner: 'nobody'
-      department: 'Infrastructure'
-      organization: 'The Company'
-      region: 'IDC01'
-    exporter_is_install: false
-    consul_public_register: false
-    consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
-    consul_public_http_prot: 'https'
-    consul_public_http_port: '8500'
-    consul_public_clients:
-      - '127.0.0.1'
+```yaml
+pgsql_version: '96'
+pgsql_releases: 'PostgreSQL'
+pgsql_sa_pass: 'password'
+pgsql_mailto: 'somebody@example.com'
+pgsql_backupset_arg:
+  keep: '2'
+  encryptkey: 'kDLQzpZKqtl58SM5lTIj5AG3n8878Aie'
+  cloud_rsync: true
+  cloud_drive: 'azureblob'
+  cloud_bwlimit: '10M'
+  cloud_event: 'sync'
+  cloud_config:
+    account: 'blobuser'
+    key: 'base64encodedkey=='
+    endpoint: 'blob.core.chinacloudapi.cn'
+pgsql_port: '5432'
+pgsql_exporter_port: '9187'
+pgsql_path: '/data'
+pgsql_archive_mode: 'on'
+pgsql_checkpoint_completion_target: '0.9'
+pgsql_commit_delay: '10'
+pgsql_commit_siblings: '5'
+pgsql_default_statistics_target: '100'
+pgsql_effective_io_concurrency: '2'
+pgsql_fsync: 'off'
+pgsql_full_page_writes: 'on'
+pgsql_hot_standby: 'on'
+pgsql_lc_messages: 'C'
+pgsql_listen_addresses: "'0.0.0.0'"
+pgsql_log_autovacuum_min_duration: '0'
+pgsql_log_checkpoints: 'on'
+pgsql_log_connections: 'on'
+pgsql_log_disconnections: 'on'
+pgsql_log_line_prefix: "'%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '"
+pgsql_log_lock_waits: 'on'
+pgsql_log_min_duration_statement: '1000'
+pgsql_log_statement: 'ddl'
+pgsql_log_temp_files: '0'
+pgsql_log_timezone: 'PRC'
+pgsql_max_wal_senders: '3'
+pgsql_max_wal_size: '4GB'
+pgsql_min_wal_size: '2GB'
+pgsql_random_page_cost: '4'
+pgsql_synchronous_commit: 'off'
+pgsql_wal_buffers: '16MB'
+pgsql_wal_level: 'logical'
+environments: 'Development'
+datacenter: 'dc01'
+domain: 'local'
+tags:
+  subscription: 'default'
+  owner: 'nobody'
+  department: 'Infrastructure'
+  organization: 'The Company'
+  region: 'China'
+exporter_is_install: false
+consul_public_register: false
+consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
+consul_public_http_prot: 'https'
+consul_public_http_port: '8500'
+consul_public_clients:
+  - '127.0.0.1'
+```
 
 ## License
 ![](https://img.shields.io/badge/MIT-purple.svg?style=for-the-badge)
