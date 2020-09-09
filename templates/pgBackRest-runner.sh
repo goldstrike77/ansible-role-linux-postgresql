@@ -26,8 +26,8 @@ fi
 
 {% if pgsql_backupset_arg.cloud_rsync | bool and pgsql_backupset_arg.cloud_drive is defined %}
 # Rsync for cloud storage
-$RCLONE --verbose --config="/etc/rclone/pgsql.conf" mkdir pgsql:{{ ansible_hostname | lower }}
-$RCLONE --bwlimit="{{ pgsql_backupset_arg.cloud_bwlimit | default('10M') }}" --verbose --config="/etc/rclone/pgsql.conf" {{ consul_backupset_arg.cloud_event | default('sync') }} {{ pgsql_path }}/backup/pgsql/backup pgsql:{{ ansible_hostname | lower }}/pgsql
+$RCLONE --no-check-certificate --verbose --config="/etc/rclone/pgsql.conf" mkdir pgsql:{{ ansible_hostname | lower }}
+$RCLONE --no-check-certificate --bwlimit="{{ pgsql_backupset_arg.cloud_bwlimit | default('10M') }}" --verbose --config="/etc/rclone/pgsql.conf" {{ consul_backupset_arg.cloud_event | default('sync') }} {{ pgsql_path }}/backup/pgsql/backup pgsql:{{ ansible_hostname | lower }}/pgsql
 {% endif %}
 # Cleanup
 #rm -f $TMPFILE

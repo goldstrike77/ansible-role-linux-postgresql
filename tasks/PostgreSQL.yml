@@ -9,7 +9,7 @@
   with_items:
     - { src: '.pgpass', dest: '/var/lib/pgsql/.pgpass', mode: '0600' }
     - { src: 'pgbackrest.conf', dest: '/etc/pgbackrest.conf', mode: '0755' }
-    - { src: 'pgBackRest-runner.sh', dest: '/usr/local/bin/pgBackRest-runner.sh', mode: '0755' }
+    - { src: 'pgBackRest-runner.sh', dest: '/usr/local/bin/pgBackRest-runner.sh', mode: '0660' }
 
 - name: PostgreSQL configuration
   shell: echo ''
@@ -27,4 +27,4 @@
     user: 'postgres'
     minute: "{{ 59 |random}}"
     hour: "{{ (( inventory_hostname | hash | list | map('int',0,16) | sum ) % 2) + 1 }}"
-    job: "/usr/local/bin/pgBackRest-runner.sh"
+    job: "/bin/sh /usr/local/bin/pgBackRest-runner.sh"
