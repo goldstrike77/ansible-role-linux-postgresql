@@ -26,5 +26,5 @@
     name: 'PostgreSQL backup job'
     user: 'postgres'
     minute: "{{ 59 |random}}"
-    hour: "{{ (( inventory_hostname | hash | list | map('int',0,16) | sum ) % 2) + 1 }}"
+    hour: "{{ (( ansible_hostname | hash | list | map('int',0,16) | sum ) % 2) + 1 }}"
     job: "/bin/sh /usr/local/bin/pgBackRest-runner.sh"
